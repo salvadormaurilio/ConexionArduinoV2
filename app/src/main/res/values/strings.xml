@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Conexion Arduino</string>
+    <string name="action_settings">Settings</string>
+    <string name="tittle_select_training">Select Training System</string>
+    <string name="btn_title_dropset">Dropset</string>
+    <string name="btn_title_pos_neg">Negative / Positive</string>
+    <string name="btn_title_nega">Negative</string>
+    <string name="title_activity_dropset">Dropset</string>
+    <string name="title_activity_pos_neg">Negative / Positive</string>
+    <string name="title_activity_negative">Negative</string>
+    <string name="title_select_exercise">SELECT EXERCISE</string>
+    <string name="title_loaded_weight">Enter Loaded Weight:</string>
+    <string name="min_loaded_weight">1 lb</string>
+    <string name="max_loaded_weight">720 lb</string>
+    <string name="btn_title_start">Start</string>
+    <string name="btn_title_exit">Exit</string>
+    <string name="select_exercise">Seleccione un Ejercicio</string>
+    <string name="repetition">Rep</string>
+    <string name="weight">Weigth</string>
+    <string name="lb">lb</string>
+    <string name="input_weight">Input Weight</string>
+    <string name="btn_title_next_weight">Next Weight</string>
+    <string name="btn_title_incre_rep">Increment Rep.</string>
+    <string name="title_table_weight">Weight</string>
+    <string name="title_table_numw_weight">Num. Weight</string>
+    <string name="title_table_num_rep">Rep. \nCounter</string>
+    <string name="title_table_negative_weight">Negative</string>
+    <string name="title_table_positive_weight">Positive</string>
+    <string name="warning_message_weight_positive">Coloca primero un peso Positivo</string>
+    <string name="warning_message_weight_negative">Coloca un peso Negativo en la celda anterior</string>
+    <string name="min_loaded_weight_pos_neg">8 lb</string>
+    <string name="warning_message_full_table">Coloca todos los valores de la Tabla</string>
+    <string name="title_dialog_weight">Weight</string>
+    <string name="title_loaded_max_weight">Max. Allowable Weight 720 lb</string>
+    <string name="key_1">1</string>
+    <string name="key_2">2</string>
+    <string name="key_3">3</string>
+    <string name="key_4">4</string>
+    <string name="key_5">5</string>
+    <string name="key_6">6</string>
+    <string name="key_7">7</string>
+    <string name="key_8">8</string>
+    <string name="key_9">9</string>
+    <string name="key_0">0</string>
+    <string name="key_clear">Clear</string>
+    <string name="warning_message_weight">Coloque un peso menor o igual a 720 lb</string>
+    <string name="warning_message_weight_max_dia">Coloque un peso menor o igual a </string>
+    <string name="warning_message_weight_min_dia">Coloque un peso mayor o igual a </string>
+    <string name="warning_message_weight_min">Coloque un peso un peso mayor a 10</string>
+    <string name="warning_message_weight_min_pos">Coloque un peso mayor o igual a 2 lb</string>
+    <string name="warning_message_weight_min_neg">Coloque un peso negativo en la celda anterior mayor o igual a 2 lb</string>
+    <string name="title_loaded_max_weight_dia">Max. Allowable Weight</string>
+    <string name="title_loaded_min_weight_dia">Min. Allowable Weight</string>
+    <string name="title_loaded_weight_dia">Enter Weight:</string>
+
+    <string name="default_text_string">No data</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="permission_denied">Permission denied!</string>
+    <string name="receiving">Receiving!</string>
+    <string name="opening_device_failed">Opening USB device failed!</string>
+    <string name="claimning_interface_failed">Claiming interface failed!</string>
+    <string name="no_in_endpoint_found">No in endpoint found!</string>
+    <string name="no_out_endpoint_found">No out endpoint found!</string>
+    <string name="no_extra_in_intent">No %1$s extra in intent!</string>
+    <string name="device_detaches">Device detached!</string>
+    <string name="no_device_found">No device found!</string>
+    <string name="found">found!</string>
+    <string name="title_exit">Salir</string>
+    <string name="message_exit">¿Desea salir de Ejercicio?</string>
+    <string name="device_found">Device found!</string>
+    <string name="btn_title_next_set">Nex Set</string>
+
+</resources>
