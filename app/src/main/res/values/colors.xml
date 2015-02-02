@@ -12,4 +12,7 @@
     <color name="red_white">#dd191d</color>
     <color name="orange_black">#e65100</color>
     <color name="orange_white">#fb8c00</color>
+    <color name="disable_white">#4d4d4d</color>
+
+
 </resources>
