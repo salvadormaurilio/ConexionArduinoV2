@@ -41,6 +41,8 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 showRegisterDialog("", 0, 1);
                 break;
             case R.id.buttonGuest:
+                Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
+                startActivity(intent);
                 break;
         }
     }

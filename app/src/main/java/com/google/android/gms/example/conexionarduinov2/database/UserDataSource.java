@@ -60,7 +60,27 @@ public class UserDataSource {
 
         }
 
+        database.close();
+
         return userInfoModel;
     }
+
+
+    public String getUserName(long id) {
+
+        String userName = null;
+
+        SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
+        Cursor cursor = database.query(Constans.NAME_TABLE_USER_DB, new String[]{Constans.NAME_USER_DB}, Constans.ID_DB + " = " + id, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            userName = cursor.getString(0);
+        }
+
+        database.close();
+
+        return userName;
+    }
+
 
 }

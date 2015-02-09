@@ -2,8 +2,8 @@
 <resources>
     <color name="white_grey_title">#607d8b</color>
 
-    <color name="grey_black">#616161</color>
-    <color name="grey_white">#9e9e9e</color>
+    <color name="grey_black">#212121</color>
+    <color name="grey_white">#757575</color>
     <color name="blue_white">#039be5</color>
     <color name="blue_black">#01579b</color>
     <color name="green_white">#7cd342</color>
@@ -13,6 +13,9 @@
     <color name="orange_black">#e65100</color>
     <color name="orange_white">#fb8c00</color>
     <color name="disable_white">#4d4d4d</color>
-
+    <color name="blue_grey_black">#263238</color>
+    <color name="blue_grey_white">#546e74</color>
+    <color name="amber_black">#ff6f00</color>
+    <color name="amber_white">#ffb300</color>
 
 </resources>

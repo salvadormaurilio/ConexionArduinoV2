@@ -22,8 +22,5 @@ public class Constans {
     public static final String IS_LOGIN_PREFERENCES = "is_login";
     public static final String ID_PREFERENCES = "id";
 
-
-
-
-
+    public static final String EXTRA_TYPE_EXERCISE = "type_exercise";
 }

@@ -26,6 +26,16 @@
     <string name="action_logout">Cerrar Sesión</string>
     <string name="message_user_not_exits">El usuario no está registrado</string>
     <string name="message_incorrect_password">Contraseña incorrecta</string>
+    <string name="text_btn_view_recommended">View Recommended Adjustments</string>
+    <string name="title_select_exercise">SELECT EXERCISE</string>
+    <string name="title_activity_e">E</string>
+    <string name="title_activity_history_exercises">HistoryExercisesActivity</string>
+    <string name="title_activity_exercise">ExerciseActivity</string>
+    <string name="tex_history">History</string>
+    <string name="btn_new_set">New Set</string>
+    <string name="text_date">Date</string>
+    <string name="tex_training_system">Training System:</string>
+    <string name="tex_weight">Weight</string>
 
 
 </resources>
