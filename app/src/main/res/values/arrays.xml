@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="excersises">
+    <string-array name="exercises">
         <item>Bench Press</item>
         <item>Shoulder Press</item>
         <item>Rows</item>
@@ -10,9 +10,25 @@
         <item>Other</item>
     </string-array>
 
+    <string-array name="trainings">
+        <item>Dropset</item>
+        <item>Negarive/Positive</item>
+        <item>Negative</item>
+    </string-array>
 
+    <string-array name="weights">
+        <item>1st</item>
+        <item>2nd</item>
+        <item>3rd</item>
+        <item>4th</item>
+        <item>5th</item>
+        <item>6th</item>
+        <item>7th</item>
+        <item>8th</item>
+        <item>9th</item>
+        <item>10th</item>
 
-
+    </string-array>
 
 
 </resources>

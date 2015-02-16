@@ -31,7 +31,7 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
         }
 
         ListView listViewExercise = (ListView) findViewById(R.id.listViewExercise);
-        ExercisesAdapter exercisesAdapter = new ExercisesAdapter(SelectExerciseActivity.this, getResources().getStringArray(R.array.excersises));
+        ExercisesAdapter exercisesAdapter = new ExercisesAdapter(SelectExerciseActivity.this, getResources().getStringArray(R.array.exercises));
         listViewExercise.setAdapter(exercisesAdapter);
         listViewExercise.setOnItemClickListener(this);
     }

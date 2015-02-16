@@ -17,5 +17,10 @@
     <color name="blue_grey_white">#546e74</color>
     <color name="amber_black">#ff6f00</color>
     <color name="amber_white">#ffb300</color>
+    <color name="black_title">#212121</color>
+    <color name="white_item_history_exercise">#e0e0e0</color>
+    <color name="primary_text_black">#212121</color>
+    <color name="gray_stroke">#616161</color>
+    <color name="blue_select_training">#027CA5</color>
 
 </resources>
