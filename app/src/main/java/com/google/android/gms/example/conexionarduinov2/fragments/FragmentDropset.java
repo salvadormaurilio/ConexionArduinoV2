@@ -43,8 +43,29 @@ public class FragmentDropset extends Fragment implements PlaceWeightListener,Eve
 
     }
 
+
     @Override
-    public void setWeight() {
+    public void onSetWeight(int weight) {
+
+    }
+
+    @Override
+    public void onStartExercise() {
+
+    }
+
+    @Override
+    public void onClearWeight() {
+
+    }
+
+    @Override
+    public void nextWeight() {
+
+    }
+
+    @Override
+    public void incrementRep() {
 
     }
 }

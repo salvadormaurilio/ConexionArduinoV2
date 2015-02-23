@@ -20,10 +20,10 @@ import com.google.android.gms.example.conexionarduinov2.fragments.FragmentNegati
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentPosNeg;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
-import com.google.android.gms.example.conexionarduinov2.utils.OnStarExerciseActivity;
+import com.google.android.gms.example.conexionarduinov2.utils.OnConexiWithActivity;
 
 public class ExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener,
-        DialogExit.OnListenerExit, OnStarExerciseActivity {
+        DialogExit.OnListenerExit, OnConexiWithActivity {
 
 
     private ListView listViewTraining;
@@ -39,8 +39,11 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     private int newWeight;
     private EventsOnFragment eventsOnFragment;
     private Button buttonStart;
+    private int minWeight;
+
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
@@ -68,6 +71,8 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
         buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonStart.setOnClickListener(this);
+        findViewById(R.id.buttonExit).setOnClickListener(this);
+
 
         isExit = false;
         isReceivingWeight = false;
@@ -100,16 +105,19 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
                 switch (positionItem) {
                     case 0:
+                        minWeight = 10;
                         FragmentDropset fragmentDropset = new FragmentDropset();
                         eventsOnFragment = fragmentDropset;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
                         break;
                     case 1:
+                        minWeight = 0;
                         FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
                         eventsOnFragment = fragmentPosNeg;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
                         break;
                     case 2:
+                        minWeight = 10;
                         FragmentNegative fragmentNegative = new FragmentNegative();
                         eventsOnFragment = fragmentNegative;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentNegative).commit();
@@ -127,19 +135,21 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     @Override
     public void onClick(View v) {
 //        if ((isExit && v.getId() != R.id.buttonExit) || isStart) {
-        if ((v.getId() != R.id.buttonExit) && isStart) {
+
+        if (positionItem == -1 && (v.getId() != R.id.buttonExit)) {
+            Toast.makeText(ExerciseActivity.this, R.string.message_select_trainig, Toast.LENGTH_SHORT).show();
+            return;
+        } else if ((v.getId() != R.id.buttonExit) && isStart) {
             return;
         }
 
 
         switch (v.getId()) {
             case R.id.buttonStart:
-                if (weight < 10) {
-                    Toast.makeText(this, R.string.warning_message_weight_min, Toast.LENGTH_SHORT).show();
+                if (weight < minWeight) {
+                    Toast.makeText(this, getString(R.string.warning_message_weight_min) + " " + minWeight, Toast.LENGTH_SHORT).show();
                 } else if (positionItem != -1) {
-                    v.setVisibility(View.GONE);
-                    isStart = true;
-//                    initListDropset();
+                    eventsOnFragment.onStartExercise();
                 } else {
                     Toast.makeText(this, R.string.select_training, Toast.LENGTH_SHORT).show();
                 }
@@ -148,6 +158,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 //                sendData(new byte[]{3});
                 if (isStart) {
 
+                } else {
                     finish();
                 }
                 finish();
@@ -186,7 +197,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                 if (weight > 0) {
                     weight = 0;
                     textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-//                    adapterDropsetAndNegative.changeWeight(weight);
+                    eventsOnFragment.onClearWeight();
                 }
                 break;
         }
@@ -209,14 +220,12 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         if (weightAux <= 720) {
             weight = weightAux;
             textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-//                adapterDropsetAndNegative.changeWeight(weight);
+            eventsOnFragment.onSetWeight(weight);
 
         } else {
             Toast.makeText(this, R.string.warning_message_weight, Toast.LENGTH_SHORT).show();
         }
-
     }
-
 
     @Override
     public void OnStart() {
@@ -277,7 +286,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         }
 //        unregisterReceiver(mReceiver);
     }
-
 
 
 }

@@ -5,7 +5,15 @@ package com.google.android.gms.example.conexionarduinov2.utils;
  */
 public interface EventsOnFragment {
 
-    public void setWeight(int weight);
+
+    public void onSetWeight(int weight);
+
     public void onStartExercise();
+
+    public void onClearWeight();
+
+    public void nextWeight();
+
+    public void incrementRep();
 
 }

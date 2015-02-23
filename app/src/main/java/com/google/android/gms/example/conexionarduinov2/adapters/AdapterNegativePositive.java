@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class AdapterNegativePositive extends BaseAdapter {
 
-
     private List<ItemPositiveNegative> itemPositiveNegatives;
     private LayoutInflater inflater;
 
@@ -45,6 +44,20 @@ public class AdapterNegativePositive extends BaseAdapter {
 
 
     public AdapterNegativePositive(Context context, PlaceWeightListener placeWeightListener) {
+        itemPositiveNegatives = new ArrayList<>();
+        itemPositiveNegatives.add(new ItemPositiveNegative(0));
+        inicialize(context, placeWeightListener);
+
+    }
+
+    public AdapterNegativePositive(Context context, PlaceWeightListener placeWeightListener, List<ItemPositiveNegative> itemPositiveNegatives) {
+        this.itemPositiveNegatives = itemPositiveNegatives;
+        inicialize(context, placeWeightListener);
+
+    }
+
+
+    private void inicialize(Context context, PlaceWeightListener placeWeightListener) {
 
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -63,14 +76,9 @@ public class AdapterNegativePositive extends BaseAdapter {
 
         positionItemPositiveNegatives = 0;
 
-        itemPositiveNegatives = new ArrayList<ItemPositiveNegative>();
-        itemPositiveNegatives.add(new ItemPositiveNegative());
-        itemPositiveNegatives.get(0).setWeightNegative(0);
-        itemPositiveNegatives.add(new ItemPositiveNegative());
-        itemPositiveNegatives.add(new ItemPositiveNegative());
-
 
     }
+
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -171,25 +179,25 @@ public class AdapterNegativePositive extends BaseAdapter {
     }
 
 
+    public void addItemPositiveNegative() {
+        itemPositiveNegatives.add(new ItemPositiveNegative());
+        notifyDataSetChanged();
+    }
     public void incrementRepetitions() {
         itemPositiveNegatives.get(positionItemPositiveNegatives).incrementRepetitionsCounts();
+        notifyDataSetChanged();
     }
-
-
-    public void changeWeightInitial(int weight) {
-        itemPositiveNegatives.get(0).setWeightNegative(weight);
-    }
-
-
 
 
     public void setNewWeightInitial(int weight) {
         itemPositiveNegatives.get(0).setWeightNegative(weight);
         itemPositiveNegatives.get(0).setWeightPositive(-1);
-        itemPositiveNegatives.get(1).setWeightNegative(-1);
-        itemPositiveNegatives.get(1).setWeightPositive(-1);
-        itemPositiveNegatives.get(2).setWeightNegative(-1);
-        itemPositiveNegatives.get(2).setWeightPositive(-1);
+
+        for (int i = 1; i < itemPositiveNegatives.size(); i++) {
+            itemPositiveNegatives.get(i).setWeightNegative(-1);
+            itemPositiveNegatives.get(i).setWeightPositive(-1);
+        }
+
         isFullTable = true;
         positionItemPositiveNegatives = 0;
         notifyDataSetChanged();
@@ -199,7 +207,6 @@ public class AdapterNegativePositive extends BaseAdapter {
     public void incrementItemPosition() {
         positionItemPositiveNegatives++;
     }
-
 
     public int getPositionItemPositiveNegatives() {
         return positionItemPositiveNegatives;
@@ -211,7 +218,7 @@ public class AdapterNegativePositive extends BaseAdapter {
             case R.id.textViewNegativeWeight:
                 if (itemPositiveNegatives.get(currentPosition).getWeightNegative() != weight) {
                     itemPositiveNegatives.get(currentPosition).setWeightNegative(weight);
-                    if (currentPosition < 2) {
+                    if (currentPosition < itemPositiveNegatives.size()-1) {
                         itemPositiveNegatives.get(currentPosition + 1).setWeightNegative(-1);
                     }
                     itemPositiveNegatives.get(currentPosition).setWeightPositive(-1);

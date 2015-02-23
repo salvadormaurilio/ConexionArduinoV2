@@ -46,7 +46,27 @@ public class FragmentNegative extends Fragment implements PlaceWeightListener, E
     }
 
     @Override
-    public void setWeight() {
+    public void onSetWeight(int weight) {
+
+    }
+
+    @Override
+    public void onStartExercise() {
+
+    }
+
+    @Override
+    public void onClearWeight() {
+
+    }
+
+    @Override
+    public void nextWeight() {
+
+    }
+
+    @Override
+    public void incrementRep() {
 
     }
 }

@@ -5,6 +5,4 @@ package com.google.android.gms.example.conexionarduinov2.utils;
  */
 public interface PlaceWeightListener {
     public void onDialogoInputWeight(int minWeight, int maxWeight, boolean isNegative);
-//    public void onNewWight(int weight);
-
 }

@@ -12,22 +12,29 @@ import android.widget.Toast;
 
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.AdapterNegativePositive;
+import com.google.android.gms.example.conexionarduinov2.database.DialogWeight;
 import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
+import com.google.android.gms.example.conexionarduinov2.utils.OnConexiWithActivity;
+import com.google.android.gms.example.conexionarduinov2.utils.OnNewWeightFromDialog;
 import com.google.android.gms.example.conexionarduinov2.utils.PlaceWeightListener;
+import com.melnykov.fab.FloatingActionButton;
 
 /**
  * Created by sati on 15/02/2015.
  */
-public class FragmentPosNeg extends Fragment implements PlaceWeightListener, EventsOnFragment {
+public class FragmentPosNeg extends Fragment implements PlaceWeightListener, EventsOnFragment, OnNewWeightFromDialog, View.OnClickListener {
 
 
     private AdapterNegativePositive adapterNegativePositive;
-    private ListView listViewDropset;
-
+    private ListView listViewPosNeg;
+    private OnConexiWithActivity onConexiWithActivity;
+    private FloatingActionButton floatingActionButton;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        onConexiWithActivity = (OnConexiWithActivity) activity;
+
     }
 
     @Override
@@ -39,37 +46,88 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        listViewDropset = (ListView) view.findViewById(R.id.listViewTable);
-
-
+        listViewPosNeg = (ListView) view.findViewById(R.id.listViewTable);
         adapterNegativePositive = new AdapterNegativePositive(getActivity(), this);
-        listViewDropset.setAdapter(adapterNegativePositive);
+        listViewPosNeg.setAdapter(adapterNegativePositive);
+
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (v.getId() == R.id.floatingActionButton) {
+            if (adapterNegativePositive.getCount() < 3) {
+                adapterNegativePositive.addItemPositiveNegative();
+            } else {
+                Toast.makeText(getActivity(), R.string.message_no_more_weight,Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
     }
 
     @Override
     public void onDialogoInputWeight(int minWeight, int maxWeight, boolean isNegative) {
-
+        DialogWeight dialogWeight = DialogWeight.newInstance(minWeight, maxWeight, isNegative);
+        dialogWeight.setOnNewWeightFromDialog(this);
+        dialogWeight.show(getFragmentManager(), "dia_wei");
     }
 
 
     @Override
-    public void setWeight(int weight) {
-
+    public void onSetWeight(int weight) {
+        adapterNegativePositive.setNewWeightInitial(weight);
     }
 
     @Override
     public void onStartExercise() {
         if (adapterNegativePositive.isFullTable()) {
+            onConexiWithActivity.OnStart();
             initExercise();
         } else {
             Toast.makeText(getActivity(), R.string.warning_message_full_table, Toast.LENGTH_SHORT).show();
         }
     }
 
-
     private void initExercise() {
         adapterNegativePositive.setClickable(false);
-        listViewDropset.setItemChecked(adapterNegativePositive.getPositionItemPositiveNegatives(), true);
+        listViewPosNeg.setItemChecked(adapterNegativePositive.getPositionItemPositiveNegatives(), true);
+        floatingActionButton.setOnClickListener(null);
 
     }
+
+    @Override
+    public void onClearWeight() {
+        adapterNegativePositive.setNewWeightInitial(0);
+    }
+
+    @Override
+    public void nextWeight() {
+        if (adapterNegativePositive.getPositionItemPositiveNegatives() < adapterNegativePositive.getCount()) {
+            adapterNegativePositive.incrementItemPosition();
+            listViewPosNeg.setItemChecked(adapterNegativePositive.getPositionItemPositiveNegatives(), true);
+        }
+
+    }
+
+    @Override
+    public void incrementRep() {
+        adapterNegativePositive.incrementRepetitions();
+    }
+
+    @Override
+    public void onNewWeghtFromDialog(int weight) {
+        adapterNegativePositive.setWeight(weight);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onConexiWithActivity = null;
+    }
+
+
 }

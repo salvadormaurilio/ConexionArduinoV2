@@ -15,6 +15,14 @@ public class ItemPositiveNegative {
         repetitionsCounts = 0;
     }
 
+
+    public ItemPositiveNegative(int weightNegative) {
+        this.weightNegative = weightNegative;
+        weightPositive = -1;
+        repetitionsCounts = 0;
+    }
+
+
     public int getWeightNegative() {
         return weightNegative;
     }
