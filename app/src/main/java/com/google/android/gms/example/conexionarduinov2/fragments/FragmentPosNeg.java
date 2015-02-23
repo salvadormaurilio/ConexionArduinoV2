@@ -124,6 +124,12 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
     }
 
     @Override
+    public void createNewDialog(int minWeight, int maxWight, boolean isNegative) {
+        DialogWeight dialogWeight = DialogWeight.newInstance(minWeight,maxWight,isNegative);
+        dialogWeight.show(getFragmentManager(), "dia_wei");
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         onConexiWithActivity = null;

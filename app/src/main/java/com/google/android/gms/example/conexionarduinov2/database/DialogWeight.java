@@ -89,8 +89,8 @@ public class DialogWeight extends DialogFragment implements View.OnClickListener
                     onNewWeightFromDialog.onNewWeghtFromDialog(weight);
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.warning_message_weight_min_dia) + " " + minWeight + lb, Toast.LENGTH_SHORT).show();
-                    DialogWeight dialogWeight = DialogWeight.newInstance(minWeight, maxWeight, getArguments().getBoolean(ISNEGATIVE));
-                    dialogWeight.show(getFragmentManager(), "dia_wei");
+                    onNewWeightFromDialog.createNewDialog(minWeight, maxWeight, getArguments().getBoolean(ISNEGATIVE));
+
                 }
 
             }

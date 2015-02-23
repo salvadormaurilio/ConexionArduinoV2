@@ -47,6 +47,7 @@ public class FragmentNegative extends Fragment implements PlaceWeightListener, E
 
     @Override
     public void onSetWeight(int weight) {
+        adapterDropsetAndNegative.setWeightInitial(weight);
 
     }
 

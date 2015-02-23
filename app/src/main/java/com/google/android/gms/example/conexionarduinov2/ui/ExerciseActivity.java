@@ -157,11 +157,11 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             case R.id.buttonExit:
 //                sendData(new byte[]{3});
                 if (isStart) {
-
+                    DialogExit dialogExit = new DialogExit();
+                    dialogExit.show(getSupportFragmentManager(), null);
                 } else {
                     finish();
                 }
-                finish();
                 break;
             case R.id.btn_key_0:
                 valueWeight(0);
