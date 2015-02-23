@@ -89,5 +89,18 @@
     <string name="warning_message_weight_min">Coloque un peso un peso mayor a 10</string>
     <string name="warning_message_weight_min_pos">Coloque un peso mayor o igual a 2 lb</string>
     <string name="warning_message_weight_min_neg">Coloque un peso negativo en la celda anterior mayor o igual a 2 lb</string>
+    <string name="title_select_training">SELEC TRAINING SYSTEM</string>
+    <string name="warning_message_weight_previous">Coloque un peso en la celda anterior.</string>
+
+    <string name="title_dialog_weight">Weight</string>
+    <string name="title_loaded_weight_dia">Enter Weight:</string>
+    <string name="title_loaded_max_weight_dia">Max. Allowable Weight</string>
+    <string name="title_loaded_min_weight_dia">Min. Allowable Weight</string>
+
+    <string name="title_table_negative_weight">Negative</string>
+    <string name="title_table_positive_weight">Positive</string>
+
+    <string name="warning_message_full_table">Coloca todos los valores de la Tabla</string>
+
 
 </resources>

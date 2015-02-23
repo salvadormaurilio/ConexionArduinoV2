@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,9 +16,14 @@ import com.google.android.gms.example.conexionarduinov2.adapters.TrainingAdapter
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
 import com.google.android.gms.example.conexionarduinov2.dialogs.DialogExit;
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentDropset;
+import com.google.android.gms.example.conexionarduinov2.fragments.FragmentNegative;
+import com.google.android.gms.example.conexionarduinov2.fragments.FragmentPosNeg;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
+import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
+import com.google.android.gms.example.conexionarduinov2.utils.OnStarExerciseActivity;
 
-public class ExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener, DialogExit.OnListenerExit {
+public class ExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener,
+        DialogExit.OnListenerExit, OnStarExerciseActivity {
 
 
     private ListView listViewTraining;
@@ -26,12 +32,13 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     private String lb;
     private TextView textViewLoadedWeight;
     private boolean isStart;
-    private boolean isListViewVisible;
     private boolean isExit;
 
     private boolean isReceivingWeight;
 
     private int newWeight;
+    private EventsOnFragment eventsOnFragment;
+    private Button buttonStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +66,9 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
         isStart = false;
 
-        findViewById(R.id.buttonStart).setOnClickListener(this);
+        buttonStart = (Button) findViewById(R.id.buttonStart);
+        buttonStart.setOnClickListener(this);
 
-        isListViewVisible = false;
         isExit = false;
         isReceivingWeight = false;
         newWeight = 0;
@@ -88,9 +95,27 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         if (!isStart && !isExit) {
             if (positionItem != position) {
                 positionItem = position;
+                weight = 0;
+                textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
 
-                FragmentDropset fragmentDropset = new FragmentDropset();
-                getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
+                switch (positionItem) {
+                    case 0:
+                        FragmentDropset fragmentDropset = new FragmentDropset();
+                        eventsOnFragment = fragmentDropset;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
+                        break;
+                    case 1:
+                        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
+                        eventsOnFragment = fragmentPosNeg;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
+                        break;
+                    case 2:
+                        FragmentNegative fragmentNegative = new FragmentNegative();
+                        eventsOnFragment = fragmentNegative;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentNegative).commit();
+                        break;
+                }
+
 //                sendData(new byte[]{(byte) (positionItem + 1)});
             }
         } else {
@@ -184,18 +209,21 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         if (weightAux <= 720) {
             weight = weightAux;
             textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-            if (isListViewVisible) {
 //                adapterDropsetAndNegative.changeWeight(weight);
-            } else {
-//                adapterDropsetAndNegative.changeWeightInvisible(weight);
-//                adapterDropsetAndNegative.notifyDataSetChanged();
-                isListViewVisible = true;
-            }
+
         } else {
             Toast.makeText(this, R.string.warning_message_weight, Toast.LENGTH_SHORT).show();
         }
 
     }
+
+
+    @Override
+    public void OnStart() {
+        buttonStart.setVisibility(View.GONE);
+        isStart = true;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -249,6 +277,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         }
 //        unregisterReceiver(mReceiver);
     }
+
 
 
 }

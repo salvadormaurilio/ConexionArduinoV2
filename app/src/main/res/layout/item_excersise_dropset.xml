@@ -27,7 +27,7 @@
             android:id="@+id/textViewWeight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/back_textview_dropset"
+            android:background="@drawable/back_item_table"
             android:gravity="center"
             android:padding="12dp"
             android:singleLine="true"

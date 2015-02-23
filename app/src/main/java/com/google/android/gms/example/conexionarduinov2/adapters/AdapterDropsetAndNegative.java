@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.example.conexionarduinov2.R;
-import com.google.android.gms.example.conexionarduinov2.utils.ItemDropset;
+import com.google.android.gms.example.conexionarduinov2.utils.ItemDropsetNegative;
+import com.google.android.gms.example.conexionarduinov2.utils.PlaceWeightListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,36 +19,64 @@ import java.util.List;
 /**
  * Created by sati on 22/10/2014.
  */
-public class AdapterDropsetAndNegative extends BaseAdapter {
+public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnClickListener {
 
 
-    private List<ItemDropset> itemDropsets;
+    private List<ItemDropsetNegative> itemDropsetNegatives;
+    private Context context;
     private LayoutInflater inflater;
+    private PlaceWeightListener placeWeightListener;
+
 
     private String[] arrayWeights;
     private String repetition;
     private String lb;
-
-    private TextView textViewRepetition;
-    private TextView textViewWeight;
+    private String placeWeight;
 
     private int typeItem;
+    private boolean isClickable;
 
-    public AdapterDropsetAndNegative(Context context, int typeItem) {
+    private int currentPosition;
+    private boolean isFullTable;
 
-        itemDropsets = new ArrayList<ItemDropset>();
-        itemDropsets.add(new ItemDropset(0));
+
+    public AdapterDropsetAndNegative(Context context, int typeItem, PlaceWeightListener placeWeightListener) {
+
+        itemDropsetNegatives = new ArrayList<>();
+        itemDropsetNegatives.add(new ItemDropsetNegative(0));
+
+        inicialize(context, typeItem, placeWeightListener);
+
+    }
+
+    public AdapterDropsetAndNegative(Context context, int typeItem, PlaceWeightListener placeWeightListener, List<ItemDropsetNegative> itemDropsetNegatives) {
+
+        this.itemDropsetNegatives = itemDropsetNegatives;
+
+        inicialize(context, typeItem, placeWeightListener);
+    }
+
+    private void inicialize(Context context, int typeItem,  PlaceWeightListener placeWeightListener) {
+
+        this.context = context;
         inflater = LayoutInflater.from(context);
+        this.placeWeightListener = placeWeightListener;
         this.typeItem = typeItem;
 
         arrayWeights = context.getResources().getStringArray(R.array.weights);
 
         repetition = " " + context.getString(R.string.repetition);
         lb = " " + context.getString(R.string.lb);
+        placeWeight = context.getString(R.string.input_weight);
+
+        isClickable = true;
+        isFullTable = true;
+        currentPosition = 0;
     }
 
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View container = convertView;
         ViewHolderDropset viewHolderDropset;
 
@@ -61,67 +91,117 @@ public class AdapterDropsetAndNegative extends BaseAdapter {
 
             container.setOnClickListener(null);
             container.setOnLongClickListener(null);
-
             container.setTag(viewHolderDropset);
         } else {
             viewHolderDropset = (ViewHolderDropset) container.getTag();
         }
 
         viewHolderDropset.getTextViewNumWeight().setText(arrayWeights[position]);
-        viewHolderDropset.getTextViewWeight().setText(itemDropsets.get(position).getWeight() + lb);
-        viewHolderDropset.getTextViewNumRep().setText(itemDropsets.get(position).getRepetitionsCounts() + repetition);
 
-        if (position == 0) {
-            textViewWeight = viewHolderDropset.getTextViewWeight();
+
+        if (itemDropsetNegatives.get(position).getWeight() > -1) {
+            viewHolderDropset.getTextViewWeight().setText(itemDropsetNegatives.get(position).getWeight() + lb);
+        } else {
+            viewHolderDropset.getTextViewWeight().setText(placeWeight);
+            isFullTable = false;
         }
 
-        if (position == itemDropsets.size() - 1) {
-            textViewRepetition = viewHolderDropset.getTextViewNumRep();
+
+        viewHolderDropset.getTextViewNumRep().setText(itemDropsetNegatives.get(position).getRepetitionsCounts() + repetition);
+
+
+        if (isClickable) {
+
+            if (position != 0) {
+
+
+                viewHolderDropset.getTextViewWeight().setBackgroundResource(typeItem == 1 ? R.drawable.back_textview_dropset : R.drawable.back_textview_negative);
+                viewHolderDropset.getTextViewWeight().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (itemDropsetNegatives.get(position - 1).getWeight() > -1) {
+                            currentPosition = position;
+                            placeWeightListener.onDialogoInputWeight(0, 0, true);
+
+                        } else {
+                            Toast.makeText(context, R.string.warning_message_weight_previous, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+            } else {
+                viewHolderDropset.getTextViewWeight().setBackgroundResource(R.drawable.back_item_table);
+                viewHolderDropset.getTextViewWeight().setOnClickListener(null);
+            }
+
+        } else {
+            viewHolderDropset.getTextViewWeight().setBackgroundResource(R.drawable.back_item_table);
+            viewHolderDropset.getTextViewWeight().setOnClickListener(null);
         }
+
 
         return container;
     }
 
-
-    public void addItemDropset(int weight) {
-        itemDropsets.add(new ItemDropset(weight));
-        notifyDataSetChanged();
-    }
-
-    public void incrementRepetitions() {
-        itemDropsets.get(itemDropsets.size() - 1).incrementRepetitionsCounts();
-        textViewRepetition.setText(itemDropsets.get(itemDropsets.size() - 1).getRepetitionsCounts() + repetition);
-    }
-
-
-    public void incrementRepetitionsInvisible(){
-        itemDropsets.get(itemDropsets.size() - 1).incrementRepetitionsCounts();
-    }
-
-    public void changeWeight(int weight) {
-        itemDropsets.get(0).setWeight(weight);
-        textViewWeight.setText(itemDropsets.get(0).getWeight()+lb);
-
-
-    }
-
-    public void changeWeightInvisible(int weight) {
-        itemDropsets.get(0).setWeight(weight);
-    }
-
     @Override
     public int getCount() {
-        return itemDropsets.size();
+        return itemDropsetNegatives.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return itemDropsets.get(position);
+        return itemDropsetNegatives.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return itemDropsets.indexOf(itemDropsets.get(position));
+        return itemDropsetNegatives.indexOf(itemDropsetNegatives.get(position));
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    public void addItemDropset() {
+        itemDropsetNegatives.add(new ItemDropsetNegative());
+        notifyDataSetChanged();
+    }
+
+    public void incrementRepetitions(int position) {
+        itemDropsetNegatives.get(position).incrementRepetitionsCounts();
+        notifyDataSetChanged();
+    }
+
+    public void setWeightInitial(int weight) {
+
+        itemDropsetNegatives.get(0).setWeight(weight);
+
+        for (int i = 1; i < itemDropsetNegatives.size(); i++) {
+            itemDropsetNegatives.get(i).setWeight(-1);
+        }
+
+        isFullTable = true;
+        notifyDataSetChanged();
+    }
+
+    public void setWetight(int weight) {
+
+        itemDropsetNegatives.get(currentPosition).setWeight(weight);
+        isFullTable = true;
+
+        notifyDataSetChanged();
+
+    }
+
+    public void setClickable(boolean isClickable) {
+        this.isClickable = isClickable;
+    }
+
+
+    public boolean isFullTable() {
+        return isFullTable;
     }
 
     private static class ViewHolderDropset {
@@ -149,6 +229,5 @@ public class AdapterDropsetAndNegative extends BaseAdapter {
             return textViewNumRep;
         }
     }
-
 
 }

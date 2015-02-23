@@ -10,11 +10,13 @@ import android.widget.ListView;
 
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.AdapterDropsetAndNegative;
+import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
+import com.google.android.gms.example.conexionarduinov2.utils.PlaceWeightListener;
 
 /**
  * Created by sati on 15/02/2015.
  */
-public class FragmentDropset extends Fragment {
+public class FragmentDropset extends Fragment implements PlaceWeightListener,EventsOnFragment {
 
 
     private AdapterDropsetAndNegative adapterDropsetAndNegative;
@@ -23,7 +25,7 @@ public class FragmentDropset extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dropset_fragment,container,false);
+        return inflater.inflate(R.layout.fragment_dropset,container,false);
     }
 
     @Override
@@ -32,7 +34,17 @@ public class FragmentDropset extends Fragment {
 
         listViewDropset = (ListView) view.findViewById(R.id.listViewTable);
 
-        adapterDropsetAndNegative = new AdapterDropsetAndNegative(getActivity(), 1);
+        adapterDropsetAndNegative = new AdapterDropsetAndNegative(getActivity(), 1, this);
         listViewDropset.setAdapter(adapterDropsetAndNegative);
+    }
+
+    @Override
+    public void onDialogoInputWeight(int minWeight, int maxWeight, boolean isNegative) {
+
+    }
+
+    @Override
+    public void setWeight() {
+
     }
 }

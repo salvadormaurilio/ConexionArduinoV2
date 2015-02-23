@@ -23,7 +23,7 @@
             android:background="@drawable/back_title_selec_excer"
             android:padding="8dp"
             android:singleLine="true"
-            android:text="@string/title_select_exercise"
+            android:text="@string/title_select_training"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/grey_white"
             android:textStyle="bold" />

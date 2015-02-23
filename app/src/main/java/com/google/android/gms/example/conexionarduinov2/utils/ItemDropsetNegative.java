@@ -3,13 +3,18 @@ package com.google.android.gms.example.conexionarduinov2.utils;
 /**
  * Created by sati on 23/10/2014.
  */
-public class ItemDropset {
+public class ItemDropsetNegative {
 
     private int weight;
     private int repetitionsCounts;
 
-    public ItemDropset(int weight) {
+    public ItemDropsetNegative(int weight) {
         this.weight = weight;
+        repetitionsCounts = 0;
+    }
+
+    public ItemDropsetNegative() {
+        this.weight = -1;
         repetitionsCounts = 0;
     }
 

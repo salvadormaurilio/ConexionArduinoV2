@@ -15,7 +15,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
-        Intent intent = new Intent(MainActivity.this, sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false) ? SelectExerciseActivity.class : LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false) ? SelectExerciseActivity.class : LoginActivity.class);
         startActivity(intent);
         finish();
     }
