@@ -3,8 +3,8 @@ package com.google.android.gms.example.conexionarduinov2.utils;
 /**
  * Created by sati on 22/02/2015.
  */
-public interface EventsOnFragment {
 
+public interface EventsOnFragment {
 
     public void onSetWeight(int weight);
 
@@ -15,5 +15,8 @@ public interface EventsOnFragment {
     public void nextWeight();
 
     public void incrementRep();
+
+    public void saveExercise(int idUser, int idExercise, int typeExercise);
+
 
 }

@@ -75,7 +75,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             if (!userDataSource.exitsUser(userName)) {
                 long id = userDataSource.insertUser(userName, password, height, typeUnits);
                 SharedPreferences.Editor editor = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE).edit();
-                editor.putLong(Constans.ID_PREFERENCES, id);
+                editor.putLong(Constans.ID_USER_PREFERENCES, id);
                 editor.putBoolean(Constans.IS_LOGIN_PREFERENCES, true);
                 editor.apply();
 
@@ -108,7 +108,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
                 if (userInfoModel != null) {
                     SharedPreferences.Editor editor = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE).edit();
-                    editor.putLong(Constans.ID_PREFERENCES, userInfoModel.getId());
+                    editor.putLong(Constans.ID_USER_PREFERENCES, userInfoModel.getId());
                     editor.putBoolean(Constans.IS_LOGIN_PREFERENCES, true);
                     editor.apply();
 

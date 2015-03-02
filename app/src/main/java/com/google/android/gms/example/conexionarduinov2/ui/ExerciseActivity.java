@@ -3,6 +3,7 @@ package com.google.android.gms.example.conexionarduinov2.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,7 +54,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
             UserDataSource userDataSource = new UserDataSource(ExerciseActivity.this);
-            getSupportActionBar().setTitle(userDataSource.getUserName(sharedPreferences.getLong(Constans.ID_PREFERENCES, 0)));
+            getSupportActionBar().setTitle(userDataSource.getUserName(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, 0)));
         }
 
         listViewTraining = (ListView) findViewById(R.id.listViewTraining);
@@ -160,6 +161,12 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                     DialogExit dialogExit = new DialogExit();
                     dialogExit.show(getSupportFragmentManager(), null);
                 } else {
+                    if (isExit) {
+                        saveExercise();
+//                sendData(new byte[]{3});
+                    } else {
+//                sendData(new byte[]{6});
+                    }
                     finish();
                 }
                 break;
@@ -234,6 +241,15 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     }
 
 
+    private void saveExercise ()
+    {
+
+
+
+    }
+
+
+
     @Override
     public void onBackPressed() {
 
@@ -242,6 +258,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             dialogExit.show(getSupportFragmentManager(), null);
         } else {
             if (isExit) {
+                saveExercise();
 //                sendData(new byte[]{3});
             } else {
 //                sendData(new byte[]{6});
@@ -258,6 +275,12 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+       getMenuInflater().inflate(R.menu.menu_exercise,menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -267,11 +290,25 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                     dialogExit.show(getSupportFragmentManager(), null);
                 } else {
                     if (isExit) {
+                        saveExercise();
 //                        sendData(new byte[]{3});
                     } else {
 //                        sendData(new byte[]{6});
                     }
                     finish();
+                }
+                break;
+
+            case R.id.action_increment:
+
+                if (isStart) {
+                    eventsOnFragment.incrementRep();
+                }
+
+                break;
+            case R.id.action_next_weight:
+                if (isStart) {
+                    eventsOnFragment.nextWeight();
                 }
                 break;
         }

@@ -13,17 +13,20 @@ import android.widget.Toast;
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.AdapterNegativePositive;
 import com.google.android.gms.example.conexionarduinov2.database.DialogWeight;
+import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
+import com.google.android.gms.example.conexionarduinov2.database.TrainingDataSource;
 import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.OnConexiWithActivity;
 import com.google.android.gms.example.conexionarduinov2.utils.OnNewWeightFromDialog;
 import com.google.android.gms.example.conexionarduinov2.utils.PlaceWeightListener;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.Calendar;
+
 /**
  * Created by sati on 15/02/2015.
  */
 public class FragmentPosNeg extends Fragment implements PlaceWeightListener, EventsOnFragment, OnNewWeightFromDialog, View.OnClickListener {
-
 
     private AdapterNegativePositive adapterNegativePositive;
     private ListView listViewPosNeg;
@@ -64,8 +67,6 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
             } else {
                 Toast.makeText(getActivity(), R.string.message_no_more_weight,Toast.LENGTH_SHORT).show();
             }
-
-
         }
     }
 
@@ -126,7 +127,22 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
     @Override
     public void createNewDialog(int minWeight, int maxWight, boolean isNegative) {
         DialogWeight dialogWeight = DialogWeight.newInstance(minWeight,maxWight,isNegative);
+        dialogWeight.setOnNewWeightFromDialog(this);
         dialogWeight.show(getFragmentManager(), "dia_wei");
+    }
+
+
+    @Override
+    public void saveExercise(int idUser, int idExercise, int typeExercise) {
+        Calendar calendar = Calendar.getInstance();
+        String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
+
+        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
+        exercisesDataSource.insertExercise(idUser, typeExercise, 1, date, adapterNegativePositive.getWeightInitial());
+
+        TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
+
+        trainingDataSource.insertTrainingNegativePositive(idExercise, adapterNegativePositive.getWeights());
     }
 
     @Override

@@ -7,9 +7,9 @@
     android:stretchColumns="*">
 
     <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="UselessParent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/textViewNumWeight"
@@ -27,7 +27,7 @@
             android:id="@+id/textViewWeight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/back_item_table"
+            android:background="@drawable/back_textview_dropset"
             android:gravity="center"
             android:padding="12dp"
             android:singleLine="true"

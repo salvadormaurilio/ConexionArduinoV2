@@ -82,6 +82,9 @@ public class HistoryExerciseAdapter extends BaseAdapter{
         return view;
     }
 
+    public long getIdExercise(int position) {
+        return infoExerciseModelList.get(position).getIdExercise();
+    }
 
     private static class ViewHolder {
         private TextView textViewDate;

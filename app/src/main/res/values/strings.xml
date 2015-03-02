@@ -103,6 +103,7 @@
     <string name="warning_message_full_table">Coloca todos los valores de la Tabla</string>
     <string name="message_no_more_weight">No se puede colocar otro peso</string>
     <string name="message_select_trainig">Por favor elija un tipo de Entrenamiento</string>
+    <string name="warning_message_weight_min_drop_neg">Coloque un peso mayor o igual a 5 lb</string>
 
 
 </resources>

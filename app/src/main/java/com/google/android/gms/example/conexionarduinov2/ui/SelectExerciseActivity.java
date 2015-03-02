@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,7 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
             UserDataSource userDataSource = new UserDataSource(SelectExerciseActivity.this);
-            getSupportActionBar().setTitle(userDataSource.getUserName(sharedPreferences.getLong(Constans.ID_PREFERENCES, 0)));
+            getSupportActionBar().setTitle(userDataSource.getUserName(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, 0)));
         }
 
         ListView listViewExercise = (ListView) findViewById(R.id.listViewExercise);
@@ -69,7 +68,6 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
 
         Intent intent;
 
-        Log.d("Entro", position + "");
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
@@ -77,6 +75,7 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
             intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, position);
         } else {
             intent = new Intent(SelectExerciseActivity.this, ExerciseActivity.class);
+
         }
         startActivity(intent);
     }

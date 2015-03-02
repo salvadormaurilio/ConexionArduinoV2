@@ -8,13 +8,13 @@ public class ItemDropsetNegative {
     private int weight;
     private int repetitionsCounts;
 
-    public ItemDropsetNegative(int weight) {
-        this.weight = weight;
+    public ItemDropsetNegative() {
+        this.weight = -1;
         repetitionsCounts = 0;
     }
 
-    public ItemDropsetNegative() {
-        this.weight = -1;
+    public ItemDropsetNegative(int weight) {
+        this.weight = weight;
         repetitionsCounts = 0;
     }
 

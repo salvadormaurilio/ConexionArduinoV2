@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.example.conexionarduinov2.R;
+import com.google.android.gms.example.conexionarduinov2.models.WeightsPositiveNegativeModel;
 import com.google.android.gms.example.conexionarduinov2.utils.ItemPositiveNegative;
 import com.google.android.gms.example.conexionarduinov2.utils.PlaceWeightListener;
 
@@ -22,7 +23,9 @@ import java.util.List;
 public class AdapterNegativePositive extends BaseAdapter {
 
     private List<ItemPositiveNegative> itemPositiveNegatives;
+    private Context context;
     private LayoutInflater inflater;
+    private PlaceWeightListener placeWeightListener;
 
     private String[] arrayWeights;
     private String repetition;
@@ -31,12 +34,9 @@ public class AdapterNegativePositive extends BaseAdapter {
 
     private boolean isClickable;
 
-    private Context context;
 
     private int currentPosition;
     private int idTextViewWeight;
-
-    private PlaceWeightListener placeWeightListener;
 
     private boolean isFullTable;
 
@@ -64,24 +64,24 @@ public class AdapterNegativePositive extends BaseAdapter {
         this.placeWeightListener = placeWeightListener;
 
         arrayWeights = context.getResources().getStringArray(R.array.weights);
+
         repetition = " " + context.getString(R.string.repetition);
         lb = " " + context.getString(R.string.lb);
         placeWeight = context.getString(R.string.input_weight);
+
         isClickable = true;
-
-        currentPosition = 0;
-        idTextViewWeight = R.id.textViewPositiveWeight;
-
         isFullTable = true;
+        currentPosition = 0;
 
+        idTextViewWeight = R.id.textViewPositiveWeight;
         positionItemPositiveNegatives = 0;
-
 
     }
 
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
         View container = convertView;
         ViewHolderDropset viewHolderDropset;
 
@@ -114,7 +114,6 @@ public class AdapterNegativePositive extends BaseAdapter {
             isFullTable = false;
             viewHolderDropset.getTextViewPositiveWeight().setText(placeWeight);
         }
-
 
         viewHolderDropset.getTextViewNumRep().setText(itemPositiveNegatives.get(position).getRepetitionsCounts() + repetition);
 
@@ -159,7 +158,6 @@ public class AdapterNegativePositive extends BaseAdapter {
             if (position != 0) {
                 viewHolderDropset.getTextViewNegativeWeight().setOnClickListener(onClickListener);
             } else {
-
                 viewHolderDropset.getTextViewNegativeWeight().setOnClickListener(null);
                 viewHolderDropset.getTextViewNegativeWeight().setBackgroundResource(R.drawable.back_item_table);
             }
@@ -183,11 +181,6 @@ public class AdapterNegativePositive extends BaseAdapter {
         itemPositiveNegatives.add(new ItemPositiveNegative());
         notifyDataSetChanged();
     }
-    public void incrementRepetitions() {
-        itemPositiveNegatives.get(positionItemPositiveNegatives).incrementRepetitionsCounts();
-        notifyDataSetChanged();
-    }
-
 
     public void setNewWeightInitial(int weight) {
         itemPositiveNegatives.get(0).setWeightNegative(weight);
@@ -203,6 +196,14 @@ public class AdapterNegativePositive extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public int getWeightInitial () {
+        return   itemPositiveNegatives.get(0).getWeightNegative();
+    }
+
+    public void incrementRepetitions() {
+        itemPositiveNegatives.get(positionItemPositiveNegatives).incrementRepetitionsCounts();
+        notifyDataSetChanged();
+    }
 
     public void incrementItemPosition() {
         positionItemPositiveNegatives++;
@@ -246,12 +247,14 @@ public class AdapterNegativePositive extends BaseAdapter {
     }
 
 
-    public int getItemPositionWeight(int position, int typeWeight) {
-        if (typeWeight == 1) {
-            return itemPositiveNegatives.get(position).getWeightNegative();
-        } else {
-            return itemPositiveNegatives.get(position).getWeightPositive();
+    public List<WeightsPositiveNegativeModel> getWeights() {
+        List<WeightsPositiveNegativeModel> weights = new ArrayList<>();
+
+        for (ItemPositiveNegative itemPositiveNegative : itemPositiveNegatives) {
+            weights.add(new WeightsPositiveNegativeModel(itemPositiveNegative.getWeightNegative(), itemPositiveNegative.getWeightPositive()));
         }
+
+        return weights;
     }
 
     @Override

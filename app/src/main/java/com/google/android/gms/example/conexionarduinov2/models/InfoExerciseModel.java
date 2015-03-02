@@ -5,21 +5,23 @@ package com.google.android.gms.example.conexionarduinov2.models;
  */
 public class InfoExerciseModel {
 
+    private long idExercise;
     private String date;
     private int typeTraining;
     private String training;
     private int weight;
 
-    public InfoExerciseModel(String date, int typeTraining, String training, int weight) {
-        this.date = date;
+    public InfoExerciseModel(long idExercise, int typeTraining, String training, String date, int weight) {
+        this.idExercise = idExercise;
         this.typeTraining = typeTraining;
         this.training = training;
+        this.date = date;
         this.weight = weight;
     }
 
 
-    public String getDate() {
-        return date;
+    public long getIdExercise() {
+        return idExercise;
     }
 
     public int getTypeTraining() {
@@ -28,6 +30,10 @@ public class InfoExerciseModel {
 
     public String getTraining() {
         return training;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public int getWeight() {

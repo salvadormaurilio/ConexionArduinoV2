@@ -1,6 +1,7 @@
 package com.google.android.gms.example.conexionarduinov2.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,7 @@ import java.util.List;
 /**
  * Created by sati on 22/10/2014.
  */
-public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnClickListener {
-
+public class AdapterDropsetAndNegative extends BaseAdapter {
 
     private List<ItemDropsetNegative> itemDropsetNegatives;
     private Context context;
@@ -38,6 +38,8 @@ public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnCli
 
     private int currentPosition;
     private boolean isFullTable;
+
+    private int positionItem;
 
 
     public AdapterDropsetAndNegative(Context context, int typeItem, PlaceWeightListener placeWeightListener) {
@@ -72,11 +74,15 @@ public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnCli
         isClickable = true;
         isFullTable = true;
         currentPosition = 0;
+
+        isFullTable = true;
+        positionItem = 0;
     }
 
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
         View container = convertView;
         ViewHolderDropset viewHolderDropset;
 
@@ -98,7 +104,6 @@ public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnCli
 
         viewHolderDropset.getTextViewNumWeight().setText(arrayWeights[position]);
 
-
         if (itemDropsetNegatives.get(position).getWeight() > -1) {
             viewHolderDropset.getTextViewWeight().setText(itemDropsetNegatives.get(position).getWeight() + lb);
         } else {
@@ -106,28 +111,33 @@ public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnCli
             isFullTable = false;
         }
 
-
         viewHolderDropset.getTextViewNumRep().setText(itemDropsetNegatives.get(position).getRepetitionsCounts() + repetition);
-
 
         if (isClickable) {
 
             if (position != 0) {
-
 
                 viewHolderDropset.getTextViewWeight().setBackgroundResource(typeItem == 1 ? R.drawable.back_textview_dropset : R.drawable.back_textview_negative);
                 viewHolderDropset.getTextViewWeight().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if (itemDropsetNegatives.get(position - 1).getWeight() > -1) {
-                            currentPosition = position;
-                            placeWeightListener.onDialogoInputWeight(0, 0, true);
+                        if (position == 1 && itemDropsetNegatives.get(0).getWeight() < 5) {
+                            Toast.makeText(context, R.string.warning_message_weight_min_drop_neg, Toast.LENGTH_SHORT).show();
+                        } else if (itemDropsetNegatives.get(position - 1).getWeight() > -1) {
 
+                            double percentageMin = 1.0 - (0.2 * (position + 1.0));
+                            double percentageMax = 1.0 - (0.2 * position);
+
+                            Log.d("POCE MAX", Math.rint(percentageMax)+"");
+                            Log.d("POCE MIN", Math.rint(percentageMin)+"");
+
+
+                            currentPosition = position;
+                            placeWeightListener.onDialogoInputWeight((int) Math.rint(itemDropsetNegatives.get(0).getWeight() * percentageMin) + 1, (int) Math.rint(itemDropsetNegatives.get(0).getWeight() * percentageMax), false);
                         } else {
                             Toast.makeText(context, R.string.warning_message_weight_previous, Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
             } else {
@@ -144,6 +154,75 @@ public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnCli
         return container;
     }
 
+    public void addItemDropsetNegative() {
+        itemDropsetNegatives.add(new ItemDropsetNegative());
+        notifyDataSetChanged();
+    }
+
+    public void setWeightInitial(int weight) {
+
+        itemDropsetNegatives.get(0).setWeight(weight);
+
+        for (int i = 1; i < itemDropsetNegatives.size(); i++) {
+            itemDropsetNegatives.get(i).setWeight(-1);
+        }
+
+        isFullTable = true;
+        positionItem = 0;
+        notifyDataSetChanged();
+    }
+
+    public int getWeightInitial () {
+      return   itemDropsetNegatives.get(0).getWeight();
+    }
+
+    public void incrementRepetitions() {
+        itemDropsetNegatives.get(positionItem).incrementRepetitionsCounts();
+        notifyDataSetChanged();
+    }
+
+    public void incrementItemPosition() {
+        positionItem++;
+    }
+
+    public int getPositionItem() {
+        return positionItem;
+    }
+
+
+    public void setWeight(int weight) {
+
+        if (itemDropsetNegatives.get(currentPosition).getWeight() != weight) {
+            itemDropsetNegatives.get(currentPosition).setWeight(weight);
+
+            for (int i = currentPosition + 1; i < itemDropsetNegatives.size(); i++) {
+                itemDropsetNegatives.get(i).setWeight(-1);
+            }
+            isFullTable = true;
+            notifyDataSetChanged();
+        }
+    }
+
+    public boolean isFullTable() {
+        return isFullTable;
+    }
+
+    public void setClickable(boolean isClickable) {
+        this.isClickable = isClickable;
+    }
+
+
+    public List<Integer> getWeights () {
+        List<Integer> weights = new ArrayList<>();
+
+        for (ItemDropsetNegative itemDropsetNegative:itemDropsetNegatives) {
+            weights.add(itemDropsetNegative.getWeight());
+        }
+
+        return weights;
+    }
+
+
     @Override
     public int getCount() {
         return itemDropsetNegatives.size();
@@ -159,50 +238,6 @@ public class AdapterDropsetAndNegative extends BaseAdapter implements View.OnCli
         return itemDropsetNegatives.indexOf(itemDropsetNegatives.get(position));
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    public void addItemDropset() {
-        itemDropsetNegatives.add(new ItemDropsetNegative());
-        notifyDataSetChanged();
-    }
-
-    public void incrementRepetitions(int position) {
-        itemDropsetNegatives.get(position).incrementRepetitionsCounts();
-        notifyDataSetChanged();
-    }
-
-    public void setWeightInitial(int weight) {
-
-        itemDropsetNegatives.get(0).setWeight(weight);
-
-        for (int i = 1; i < itemDropsetNegatives.size(); i++) {
-            itemDropsetNegatives.get(i).setWeight(-1);
-        }
-
-        isFullTable = true;
-        notifyDataSetChanged();
-    }
-
-    public void setWetight(int weight) {
-
-        itemDropsetNegatives.get(currentPosition).setWeight(weight);
-        isFullTable = true;
-
-        notifyDataSetChanged();
-
-    }
-
-    public void setClickable(boolean isClickable) {
-        this.isClickable = isClickable;
-    }
-
-
-    public boolean isFullTable() {
-        return isFullTable;
-    }
 
     private static class ViewHolderDropset {
 

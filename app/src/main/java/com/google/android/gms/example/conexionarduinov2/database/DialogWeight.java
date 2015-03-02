@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class DialogWeight extends DialogFragment implements View.OnClickListener
 
     private static final String MIN_WEIGHT = "min_weight";
     private static final String MAX_WEIGHT = "max_weight";
-    private static final String ISNEGATIVE = "is_negative";
+    private static final String IS_NEGATIVE = "is_negative";
 
     private TextView textViewDialogLoadedWeight;
     private String lb;
@@ -37,13 +38,14 @@ public class DialogWeight extends DialogFragment implements View.OnClickListener
         Bundle bundle = new Bundle();
         bundle.putInt(MIN_WEIGHT, minWeight);
         bundle.putInt(MAX_WEIGHT, maxWight);
-        bundle.putBoolean(ISNEGATIVE, isNegative);
+        bundle.putBoolean(IS_NEGATIVE, isNegative);
         dialogFragment.setArguments(bundle);
         return dialogFragment;
     }
 
 
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -64,7 +66,7 @@ public class DialogWeight extends DialogFragment implements View.OnClickListener
         textViewDialogLoadedWeight.setText(loadedWeight + " " + weight + lb);
 
         TextView textViewDialogMinMaxWeight = (TextView) view.findViewById(R.id.textViewMinMaxDialogWeight);
-        textViewDialogMinMaxWeight.setText((getArguments().getBoolean(ISNEGATIVE) ? getString(R.string.title_loaded_max_weight_dia) + " " + maxWeight :
+        textViewDialogMinMaxWeight.setText((getArguments().getBoolean(IS_NEGATIVE) ? getString(R.string.title_loaded_max_weight_dia) + " " + maxWeight :
                 getString(R.string.title_loaded_min_weight_dia) + " " + minWeight) + lb);
 
 
@@ -89,8 +91,7 @@ public class DialogWeight extends DialogFragment implements View.OnClickListener
                     onNewWeightFromDialog.onNewWeghtFromDialog(weight);
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.warning_message_weight_min_dia) + " " + minWeight + lb, Toast.LENGTH_SHORT).show();
-                    onNewWeightFromDialog.createNewDialog(minWeight, maxWeight, getArguments().getBoolean(ISNEGATIVE));
-
+                    onNewWeightFromDialog.createNewDialog(minWeight, maxWeight, getArguments().getBoolean(IS_NEGATIVE));
                 }
 
             }
