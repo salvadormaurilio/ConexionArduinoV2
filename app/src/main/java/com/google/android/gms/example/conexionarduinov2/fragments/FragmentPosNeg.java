@@ -15,6 +15,7 @@ import com.google.android.gms.example.conexionarduinov2.adapters.AdapterNegative
 import com.google.android.gms.example.conexionarduinov2.database.DialogWeight;
 import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
 import com.google.android.gms.example.conexionarduinov2.database.TrainingDataSource;
+import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.OnConexiWithActivity;
 import com.google.android.gms.example.conexionarduinov2.utils.OnNewWeightFromDialog;
@@ -33,6 +34,18 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
     private OnConexiWithActivity onConexiWithActivity;
     private FloatingActionButton floatingActionButton;
 
+
+    public FragmentPosNeg() {
+    }
+
+    public static FragmentPosNeg newInstance(long idExercise) {
+        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
+        Bundle bundle = new Bundle();
+        bundle.putLong(Constans.ID_EXERCISE_FRAG, idExercise);
+        fragmentPosNeg.setArguments(bundle);
+        return fragmentPosNeg;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -50,7 +63,16 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
         super.onViewCreated(view, savedInstanceState);
 
         listViewPosNeg = (ListView) view.findViewById(R.id.listViewTable);
-        adapterNegativePositive = new AdapterNegativePositive(getActivity(), this);
+
+        Bundle bundle = getArguments();
+        if (getArguments() != null) {
+            TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
+            adapterNegativePositive = new AdapterNegativePositive(getActivity(), this,
+                    trainingDataSource.queryTrainingNegativePositive(bundle.getLong(Constans.ID_EXERCISE_FRAG)));
+        } else {
+            adapterNegativePositive = new AdapterNegativePositive(getActivity(), this);
+        }
+
         listViewPosNeg.setAdapter(adapterNegativePositive);
 
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
@@ -133,16 +155,16 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
 
 
     @Override
-    public void saveExercise(int idUser, int idExercise, int typeExercise) {
+    public void saveExercise(long idUser, int typeExercise) {
         Calendar calendar = Calendar.getInstance();
         String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
 
         ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
-        exercisesDataSource.insertExercise(idUser, typeExercise, 1, date, adapterNegativePositive.getWeightInitial());
+        long idExercise = exercisesDataSource.insertExercise(idUser, typeExercise, 1, date, adapterNegativePositive.getWeightInitial());
 
         TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
 
-        trainingDataSource.insertTrainingNegativePositive(idExercise, adapterNegativePositive.getWeights());
+        trainingDataSource.insertTrainingNegativePositive(idExercise, adapterNegativePositive.getItemPositiveNegatives());
     }
 
     @Override

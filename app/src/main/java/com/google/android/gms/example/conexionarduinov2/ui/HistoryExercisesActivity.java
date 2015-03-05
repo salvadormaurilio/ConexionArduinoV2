@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -55,13 +56,26 @@ public class HistoryExercisesActivity extends ActionBarActivity implements Histo
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(HistoryExercisesActivity.this);
+        List<InfoExerciseModel> infoExerciseList = exercisesDataSource.queryExercises(HistoryExercisesActivity.this, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), typeExercise);
+        exerciseAdapter.setInfoExerciseModelList(infoExerciseList);
+        exerciseAdapter.notifyDataSetChanged();
+
+    }
 
     @Override
     public void onOpenExercise(int position) {
         Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
         intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
         intent.putExtra(Constans.ID_EXERCISE, exerciseAdapter.getIdExercise(position));
+        intent.putExtra(Constans.EXTRA_TYPE_TRAINING, exerciseAdapter.getTypeTraining(position));
         startActivity(intent);
+
+        Log.d("Entro", "Usar ejercio: " + typeExercise + "," + exerciseAdapter.getIdExercise(position) + "," + exerciseAdapter.getTypeTraining(position));
     }
 
     @Override
@@ -69,7 +83,8 @@ public class HistoryExercisesActivity extends ActionBarActivity implements Histo
 
         Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
         intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
-        intent.putExtra(Constans.ID_EXERCISE, -1);
+        intent.putExtra(Constans.ID_EXERCISE, -1L);
+        intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
         startActivity(intent);
     }
 
@@ -83,7 +98,5 @@ public class HistoryExercisesActivity extends ActionBarActivity implements Histo
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }

@@ -3,6 +3,7 @@ package com.google.android.gms.example.conexionarduinov2.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 
@@ -35,6 +36,12 @@ public class UserSQLiteOpenHelper extends SQLiteOpenHelper {
         String sqlNameTablePosNeg = "CREATE TABLE " + Constans.NAME_TABLE_TRAINING_NEG_POS_DB + " ( " + Constans.ID_DB + " INTEGER PRIMARY KEY, " +
                 Constans. ID_EXERCISE_DB + " INTEGER, " + Constans.WEIGHTS_NEGA_DB + " TEXT, " +Constans.WEIGHTS_POSI_DB + " TEXT)";
 
+
+        Log.d("TAG_TABLE",sqlNameTableUser);
+        Log.d("TAG_TABLE",sqlNameTableExercises);
+        Log.d("TAG_TABLE",sqlNameTableDropset);
+        Log.d("TAG_TABLE",sqlNameTableNegative);
+        Log.d("TAG_TABLE",sqlNameTablePosNeg);
 
         db.execSQL(sqlNameTableUser);
         db.execSQL(sqlNameTableExercises);

@@ -82,9 +82,19 @@ public class HistoryExerciseAdapter extends BaseAdapter{
         return view;
     }
 
+    public void setInfoExerciseModelList(List<InfoExerciseModel> infoExerciseModelList) {
+        this.infoExerciseModelList = infoExerciseModelList;
+    }
+
     public long getIdExercise(int position) {
         return infoExerciseModelList.get(position).getIdExercise();
     }
+
+
+    public int getTypeTraining (int position) {
+        return infoExerciseModelList.get(position).getTypeTraining();
+    }
+
 
     private static class ViewHolder {
         private TextView textViewDate;

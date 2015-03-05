@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.example.conexionarduinov2.R;
-import com.google.android.gms.example.conexionarduinov2.models.WeightsPositiveNegativeModel;
 import com.google.android.gms.example.conexionarduinov2.utils.ItemPositiveNegative;
 import com.google.android.gms.example.conexionarduinov2.utils.PlaceWeightListener;
 
@@ -55,7 +54,6 @@ public class AdapterNegativePositive extends BaseAdapter {
         inicialize(context, placeWeightListener);
 
     }
-
 
     private void inicialize(Context context, PlaceWeightListener placeWeightListener) {
 
@@ -246,15 +244,8 @@ public class AdapterNegativePositive extends BaseAdapter {
         this.isClickable = isClickable;
     }
 
-
-    public List<WeightsPositiveNegativeModel> getWeights() {
-        List<WeightsPositiveNegativeModel> weights = new ArrayList<>();
-
-        for (ItemPositiveNegative itemPositiveNegative : itemPositiveNegatives) {
-            weights.add(new WeightsPositiveNegativeModel(itemPositiveNegative.getWeightNegative(), itemPositiveNegative.getWeightPositive()));
-        }
-
-        return weights;
+    public List<ItemPositiveNegative> getItemPositiveNegatives() {
+        return itemPositiveNegatives;
     }
 
     @Override

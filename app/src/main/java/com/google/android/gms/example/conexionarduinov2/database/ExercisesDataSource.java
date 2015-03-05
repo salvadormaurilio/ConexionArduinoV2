@@ -24,9 +24,11 @@ public class ExercisesDataSource {
         this.userSQLiteOpenHelper = new UserSQLiteOpenHelper(context, "DBUsers", null, 1);
     }
 
+    public long insertExercise(long idUser, int typeExercise, int typeTraining, String date, int weight) {
 
+        Log.d(Constans.TAG_DB, "insertExercise");
+        Log.d(Constans.TAG_DB, "idUser: " + idUser+", TypeExer: "+typeExercise+", typeTra: "+typeTraining);
 
-    public long insertExercise(int idUser, int typeExercise, int typeTraining, String date, int weight) {
 
         long id;
         SQLiteDatabase database = userSQLiteOpenHelper.getWritableDatabase();
@@ -41,18 +43,22 @@ public class ExercisesDataSource {
         id = database.insert(Constans.NAME_TABLE_USER_EXERCISES_DB, null, contentValues);
         database.close();
 
-        Log.d("TAG_DB", id + "");
+        Log.d(Constans.TAG_DB, "IdExcer "+id );
         return id;
     }
 
 
     public List<InfoExerciseModel> queryExercises(Context context, long idUser, int typeExercise) {
 
+
+        Log.d(Constans.TAG_DB, "queryExercises");
+        Log.d(Constans.TAG_DB, "idUser: " + idUser+", TypeExer: "+typeExercise);
+
         List<InfoExerciseModel> infoExerciseModelList = new ArrayList<>();
 
         SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
 
-        String[] columns = new String[]{Constans.ID_EXERCISE_DB, Constans.TYPE_TRAINING_DB, Constans.DATE_DB, Constans.WEIGHT_DB};
+        String[] columns = new String[]{Constans.ID_DB, Constans.TYPE_TRAINING_DB, Constans.DATE_DB, Constans.WEIGHT_DB};
         Cursor cursor = database.query(Constans.NAME_TABLE_USER_EXERCISES_DB, columns, Constans.ID_USER_DB + " =? AND " + Constans.TYPE_EXERCISE_DB + " =?", new String[]{idUser+"", typeExercise+""}, null, null, null);
 
         if (cursor.moveToFirst()) {

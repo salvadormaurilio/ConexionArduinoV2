@@ -16,7 +16,6 @@ public interface EventsOnFragment {
 
     public void incrementRep();
 
-    public void saveExercise(int idUser, int idExercise, int typeExercise);
-
+    public void saveExercise(long idUser, int typeExercise);
 
 }

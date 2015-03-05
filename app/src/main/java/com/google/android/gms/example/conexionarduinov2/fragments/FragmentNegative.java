@@ -15,6 +15,7 @@ import com.google.android.gms.example.conexionarduinov2.adapters.AdapterDropsetA
 import com.google.android.gms.example.conexionarduinov2.database.DialogWeight;
 import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
 import com.google.android.gms.example.conexionarduinov2.database.TrainingDataSource;
+import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.OnConexiWithActivity;
 import com.google.android.gms.example.conexionarduinov2.utils.OnNewWeightFromDialog;
@@ -33,6 +34,17 @@ public class FragmentNegative extends Fragment implements PlaceWeightListener, E
     private FloatingActionButton floatingActionButton;
 
 
+    public static FragmentNegative newInstance (long idExercise) {
+        FragmentNegative fragmentNegative = new FragmentNegative();
+        Bundle bundle = new Bundle();
+        bundle.putLong(Constans.ID_EXERCISE_FRAG, idExercise);
+        fragmentNegative.setArguments(bundle);
+        return fragmentNegative;
+    }
+
+    public FragmentNegative() {
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -50,9 +62,19 @@ public class FragmentNegative extends Fragment implements PlaceWeightListener, E
         super.onViewCreated(view, savedInstanceState);
 
         listViewDropset = (ListView) view.findViewById(R.id.listViewTable);
-        adapterDropsetAndNegative = new AdapterDropsetAndNegative(getActivity(), 2, this);
-        listViewDropset.setAdapter(adapterDropsetAndNegative);
 
+        Bundle bundle = getArguments();
+        if (getArguments() != null) {
+            TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
+            adapterDropsetAndNegative = new AdapterDropsetAndNegative(getActivity(), 2, this,
+                    trainingDataSource.queryTrainingDropsetNegative(bundle.getLong(Constans.ID_EXERCISE_FRAG), 2));
+        } else {
+            adapterDropsetAndNegative = new AdapterDropsetAndNegative(getActivity(), 2, this);
+
+
+        }
+
+        listViewDropset.setAdapter(adapterDropsetAndNegative);
 
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(this);
@@ -134,12 +156,12 @@ public class FragmentNegative extends Fragment implements PlaceWeightListener, E
     }
 
     @Override
-    public void saveExercise(int idUser, int idExercise, int typeExercise) {
+    public void saveExercise(long idUser, int typeExercise) {
         Calendar calendar = Calendar.getInstance();
         String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
 
         ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
-        exercisesDataSource.insertExercise(idUser, typeExercise, 2, date, adapterDropsetAndNegative.getWeightInitial());
+        long idExercise = exercisesDataSource.insertExercise(idUser, typeExercise, 2, date, adapterDropsetAndNegative.getWeightInitial());
 
         TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
 

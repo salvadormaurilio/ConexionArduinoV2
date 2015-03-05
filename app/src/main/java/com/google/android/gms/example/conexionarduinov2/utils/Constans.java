@@ -38,6 +38,8 @@ public class Constans {
     public static final String WEIGHTS_NEGA_DB = "weights_negatives";
     public static final String WEIGHTS_POSI_DB = "weights_positives";
 
-
     public static final String ID_EXERCISE = "id_exercise_table";
+    public static final String EXTRA_TYPE_TRAINING = "type_training";
+    public static final String ID_EXERCISE_FRAG = "id_exercise_frag";
+    public static final String TAG_DB = "TAG_DB";
 }

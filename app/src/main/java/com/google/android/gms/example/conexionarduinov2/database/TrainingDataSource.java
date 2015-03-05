@@ -6,8 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.google.android.gms.example.conexionarduinov2.models.WeightsPositiveNegativeModel;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
+import com.google.android.gms.example.conexionarduinov2.utils.ItemDropsetNegative;
+import com.google.android.gms.example.conexionarduinov2.utils.ItemPositiveNegative;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,11 @@ public class TrainingDataSource {
         this.userSQLiteOpenHelper = new UserSQLiteOpenHelper(context, "DBUsers", null, 1);
     }
 
-    public long insertTrainingDropsetNegative(int idExercise, List<Integer> weightList, int typeTraining) {
+    public long insertTrainingDropsetNegative(long idExercise, List<Integer> weightList, int typeTraining) {
+
+        Log.d(Constans.TAG_DB, "insertTrainingDropsetNegative");
+        Log.d(Constans.TAG_DB, "idExe: " + idExercise+", Size List: "+weightList.size()+", TypeTra: "+typeTraining);
+
 
         long id;
         SQLiteDatabase database = userSQLiteOpenHelper.getWritableDatabase();
@@ -42,14 +47,18 @@ public class TrainingDataSource {
         contentValues.put(Constans.ID_EXERCISE_DB, idExercise);
         contentValues.put(Constans.WEIGHTS_DB, weights);
 
-        id = database.insert(typeTraining == 1 ? Constans.NAME_TABLE_TRAINING_DROSET_DB : Constans.NAME_TABLE_TRAINING_NEGATIVE_DB, null, contentValues);
+        id = database.insert(typeTraining == 0 ? Constans.NAME_TABLE_TRAINING_DROSET_DB : Constans.NAME_TABLE_TRAINING_NEGATIVE_DB, null, contentValues);
         database.close();
 
-        Log.d("TAG_DB", id + "");
         return id;
     }
 
-    public long insertTrainingNegativePositive(int idExercise, List<WeightsPositiveNegativeModel> weightsPositiveNegativeModels) {
+    public long insertTrainingNegativePositive(long idExercise, List<ItemPositiveNegative> itemPositiveNegatives) {
+
+
+
+        Log.d(Constans.TAG_DB, "insertTrainingNegativePositive");
+        Log.d(Constans.TAG_DB, "idExe: " + idExercise+", Size List: "+itemPositiveNegatives.size());
 
         long id;
         SQLiteDatabase database = userSQLiteOpenHelper.getWritableDatabase();
@@ -57,13 +66,13 @@ public class TrainingDataSource {
         String weightsNegatives = "";
         String weightsPositives = "";
 
-        for (int i = 0; i < weightsPositiveNegativeModels.size(); i++) {
-            if (i < weightsPositiveNegativeModels.size() - 1) {
-                weightsNegatives += weightsPositiveNegativeModels.get(i).getWeightNegative() + "-";
-                weightsPositives += weightsPositiveNegativeModels.get(i).getWeightNegative() + "-";
+        for (int i = 0; i < itemPositiveNegatives.size(); i++) {
+            if (i < itemPositiveNegatives.size() - 1) {
+                weightsNegatives += itemPositiveNegatives.get(i).getWeightNegative() + "-";
+                weightsPositives += itemPositiveNegatives.get(i).getWeightNegative() + "-";
             } else {
-                weightsNegatives += weightsPositiveNegativeModels.get(i).getWeightPositive() + "";
-                weightsPositives += weightsPositiveNegativeModels.get(i).getWeightPositive() + "";
+                weightsNegatives += itemPositiveNegatives.get(i).getWeightPositive() + "";
+                weightsPositives += itemPositiveNegatives.get(i).getWeightPositive() + "";
             }
         }
 
@@ -80,15 +89,18 @@ public class TrainingDataSource {
     }
 
 
-    public List<Integer> queryTraininDropsetNegative(int idExercise, int typeTraining) {
+    public List<ItemDropsetNegative> queryTrainingDropsetNegative(long idExercise, int typeTraining) {
+
+        Log.d(Constans.TAG_DB, "queryTrainingDropsetNegative");
+        Log.d(Constans.TAG_DB, "idExe: " + idExercise+", TypeTra:"+typeTraining);
 
 
-        List<Integer> weights = new ArrayList<>();
+        List<ItemDropsetNegative> weights = new ArrayList<>();
 
         SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
 
         String[] columns = new String[]{Constans.WEIGHTS_DB};
-        Cursor cursor = database.query(typeTraining == 1 ? Constans.NAME_TABLE_TRAINING_DROSET_DB : Constans.NAME_TABLE_TRAINING_NEGATIVE_DB, columns, Constans.ID_EXERCISE_DB + " =?",
+        Cursor cursor = database.query(typeTraining == 0 ? Constans.NAME_TABLE_TRAINING_DROSET_DB : Constans.NAME_TABLE_TRAINING_NEGATIVE_DB, columns, Constans.ID_EXERCISE_DB + " =?",
                 new String[]{idExercise + ""}, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -96,7 +108,7 @@ public class TrainingDataSource {
             String weightsString[] = cursor.getString(0).split("-");
 
             for (String weight : weightsString) {
-                weights.add(Integer.parseInt(weight));
+                weights.add(new ItemDropsetNegative(Integer.parseInt(weight)));
             }
         }
         database.close();
@@ -104,10 +116,12 @@ public class TrainingDataSource {
         return weights;
     }
 
-    public List<WeightsPositiveNegativeModel> queryTraininDropsetNegative(int idExercise) {
+    public List<ItemPositiveNegative> queryTrainingNegativePositive(long idExercise) {
 
+        Log.d(Constans.TAG_DB, "queryTrainingNegativePositive");
+        Log.d(Constans.TAG_DB, "idExe: " + idExercise);
 
-        List<WeightsPositiveNegativeModel> positiveNegativeModels = new ArrayList<>();
+        List<ItemPositiveNegative> positiveNegativeModels = new ArrayList<>();
 
         SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
 
@@ -121,8 +135,7 @@ public class TrainingDataSource {
             String weightsPositiveString[] = cursor.getString(1).split("-");
 
             for (int i = 0; i < weightsNegativeString.length; i++) {
-                positiveNegativeModels.add(new WeightsPositiveNegativeModel(Integer.parseInt(weightsNegativeString[i]), Integer.parseInt(weightsPositiveString[i])));
-
+                positiveNegativeModels.add(new ItemPositiveNegative(Integer.parseInt(weightsNegativeString[i]), Integer.parseInt(weightsPositiveString[i])));
             }
 
         }
@@ -130,7 +143,5 @@ public class TrainingDataSource {
 
         return positiveNegativeModels;
     }
-
-
 
 }

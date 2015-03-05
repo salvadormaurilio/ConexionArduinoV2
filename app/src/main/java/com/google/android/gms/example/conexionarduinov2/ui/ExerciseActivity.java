@@ -41,6 +41,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     private EventsOnFragment eventsOnFragment;
     private Button buttonStart;
     private int minWeight;
+    private int typeExercise;
 
 
     @Override
@@ -74,7 +75,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         buttonStart.setOnClickListener(this);
         findViewById(R.id.buttonExit).setOnClickListener(this);
 
-
         isExit = false;
         isReceivingWeight = false;
         newWeight = 0;
@@ -91,6 +91,49 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         findViewById(R.id.btn_key_9).setOnClickListener(this);
         findViewById(R.id.btn_key_clear).setOnClickListener(this);
 
+
+        obtainExercise();
+
+    }
+
+    private void obtainExercise() {
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+
+            typeExercise = getIntent().getIntExtra(Constans.EXTRA_TYPE_EXERCISE, 0);
+            long idExercise = bundle.getLong(Constans.ID_EXERCISE, -1);
+
+            if (idExercise != -1) {
+                int typeTraining = getIntent().getIntExtra(Constans.EXTRA_TYPE_TRAINING, 1);
+                switch (typeTraining) {
+                    case 0:
+                        FragmentDropset fragmentDropset = FragmentDropset.newInstance(idExercise);
+                        eventsOnFragment = fragmentDropset;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
+                        break;
+                    case 1:
+                        FragmentPosNeg fragmentPosNeg = FragmentPosNeg.newInstance(idExercise);
+                        eventsOnFragment = fragmentPosNeg;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
+                        break;
+                    case 2:
+                        FragmentNegative fragmentNegative = FragmentNegative.newInstance(idExercise);
+                        eventsOnFragment = fragmentNegative;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentNegative).commit();
+                        break;
+                }
+
+                positionItem = typeTraining;
+                listViewTraining.setItemChecked(positionItem, true);
+                weight = 0;
+                textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
+            }
+
+
+        }
+
+
     }
 
 
@@ -106,19 +149,19 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
                 switch (positionItem) {
                     case 0:
-                        minWeight = 10;
+                        minWeight = 5;
                         FragmentDropset fragmentDropset = new FragmentDropset();
                         eventsOnFragment = fragmentDropset;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
                         break;
                     case 1:
-                        minWeight = 0;
+                        minWeight = 2;
                         FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
                         eventsOnFragment = fragmentPosNeg;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
                         break;
                     case 2:
-                        minWeight = 10;
+                        minWeight = 5;
                         FragmentNegative fragmentNegative = new FragmentNegative();
                         eventsOnFragment = fragmentNegative;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentNegative).commit();
@@ -243,11 +286,22 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
     private void saveExercise ()
     {
-
-
-
+        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
+            eventsOnFragment.saveExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, 0), typeExercise);
+        }
     }
 
+
+    @Override
+    public void onListenerExit() {
+        isStart = false;
+//        sendData(new byte[]{3});
+        finish();
+
+        saveExercise();
+
+    }
 
 
     @Override
@@ -265,13 +319,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             }
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public void onListenerExit() {
-        isStart = false;
-//        sendData(new byte[]{3});
-        finish();
     }
 
     @Override
