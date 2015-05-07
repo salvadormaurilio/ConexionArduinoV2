@@ -51,18 +51,5 @@
         android:dividerHeight="0dp" />
 
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/listViewTable"
-        android:src="@drawable/ic_add_white_24dp"
-        fab:fab_colorNormal="@color/amber_white"
-        fab:fab_colorPressed="@color/amber_black" />
-
 
 </RelativeLayout>

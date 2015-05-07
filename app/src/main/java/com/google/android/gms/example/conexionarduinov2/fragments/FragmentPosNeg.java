@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.AdapterNegativePositive;
-import com.google.android.gms.example.conexionarduinov2.database.DialogWeight;
+import com.google.android.gms.example.conexionarduinov2.dialogs.DialogWeight;
 import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
 import com.google.android.gms.example.conexionarduinov2.database.TrainingDataSource;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
@@ -27,7 +27,7 @@ import java.util.Calendar;
 /**
  * Created by sati on 15/02/2015.
  */
-public class FragmentPosNeg extends Fragment implements PlaceWeightListener, EventsOnFragment, OnNewWeightFromDialog, View.OnClickListener {
+public class FragmentPosNeg extends Fragment implements PlaceWeightListener, EventsOnFragment, OnNewWeightFromDialog {
 
     private AdapterNegativePositive adapterNegativePositive;
     private ListView listViewPosNeg;
@@ -75,21 +75,6 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
 
         listViewPosNeg.setAdapter(adapterNegativePositive);
 
-        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        if (v.getId() == R.id.floatingActionButton) {
-            if (adapterNegativePositive.getCount() < 3) {
-                adapterNegativePositive.addItemPositiveNegative();
-            } else {
-                Toast.makeText(getActivity(), R.string.message_no_more_weight,Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override

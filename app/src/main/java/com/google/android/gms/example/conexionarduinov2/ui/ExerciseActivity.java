@@ -17,7 +17,6 @@ import com.google.android.gms.example.conexionarduinov2.adapters.TrainingAdapter
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
 import com.google.android.gms.example.conexionarduinov2.dialogs.DialogExit;
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentDropset;
-import com.google.android.gms.example.conexionarduinov2.fragments.FragmentNegative;
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentPosNeg;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
@@ -117,11 +116,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                         eventsOnFragment = fragmentPosNeg;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
                         break;
-                    case 2:
-                        FragmentNegative fragmentNegative = FragmentNegative.newInstance(idExercise);
-                        eventsOnFragment = fragmentNegative;
-                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentNegative).commit();
-                        break;
                 }
 
                 positionItem = typeTraining;
@@ -159,12 +153,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                         FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
                         eventsOnFragment = fragmentPosNeg;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
-                        break;
-                    case 2:
-                        minWeight = 5;
-                        FragmentNegative fragmentNegative = new FragmentNegative();
-                        eventsOnFragment = fragmentNegative;
-                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentNegative).commit();
                         break;
                 }
 
@@ -284,8 +272,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     }
 
 
-    private void saveExercise ()
-    {
+    private void saveExercise() {
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
             eventsOnFragment.saveExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, 0), typeExercise);
@@ -323,7 +310,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.menu_exercise,menu);
+        getMenuInflater().inflate(R.menu.menu_exercise, menu);
         return true;
     }
 

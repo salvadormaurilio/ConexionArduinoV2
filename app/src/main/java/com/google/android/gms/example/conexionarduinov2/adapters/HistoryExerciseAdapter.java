@@ -1,6 +1,7 @@
 package com.google.android.gms.example.conexionarduinov2.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +17,16 @@ import java.util.List;
 /**
  * Created by sati on 08/02/2015.
  */
-public class HistoryExerciseAdapter extends BaseAdapter{
+public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickListener {
 
 
     private List<InfoExerciseModel> infoExerciseModelList;
     private LayoutInflater inflater;
     private OnOpenExerciseListener onOpenExerciseListener;
 
-
-
-    public interface OnOpenExerciseListener
-    {
-        public void onOpenExercise(int position);
+    public interface OnOpenExerciseListener {
+        public void onOpenViewSet(int position);
+        public void onOpenNewSet(int position);
     }
 
 
@@ -61,7 +60,7 @@ public class HistoryExerciseAdapter extends BaseAdapter{
 
         if (view == null) {
             view = inflater.inflate(R.layout.item_listview_history_exercise, parent, false);
-            viewHolder = new ViewHolder(view, R.id.textViewDate, R.id.textViewTraining, R.id.textViewWeight, R.id.buttonViewRepeatSet);
+            viewHolder = new ViewHolder(view, R.id.textViewDate, R.id.textViewTraining, R.id.textViewWeight, R.id.buttonViewSet, R.id.buttonViewRepeatSet);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -71,16 +70,24 @@ public class HistoryExerciseAdapter extends BaseAdapter{
 
         viewHolder.getTextViewDate().setText(exerciseModel.getDate());
         viewHolder.getTextViewTraining().setText(exerciseModel.getTraining());
-        viewHolder.getTextViewWeight().setText(exerciseModel.getWeight()+" lb");
-        viewHolder.getButtonRepeatSet().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOpenExerciseListener.onOpenExercise(position);
-            }
-        });
-
+        viewHolder.getTextViewWeight().setText(exerciseModel.getWeight() + " lb");
+        viewHolder.setButtonViewSetListener(HistoryExerciseAdapter.this, position);
+        viewHolder.setButtonRepetaSetListener(HistoryExerciseAdapter.this, position);
         return view;
     }
+
+    @Override
+    public void onClick(View v) {
+
+        int position = (int) v.getTag();
+
+        if (v.getId() == R.id.buttonViewSet) {
+            onOpenExerciseListener.onOpenViewSet(position);
+        } else {
+            onOpenExerciseListener.onOpenNewSet(position);
+        }
+    }
+
 
     public void setInfoExerciseModelList(List<InfoExerciseModel> infoExerciseModelList) {
         this.infoExerciseModelList = infoExerciseModelList;
@@ -91,7 +98,7 @@ public class HistoryExerciseAdapter extends BaseAdapter{
     }
 
 
-    public int getTypeTraining (int position) {
+    public int getTypeTraining(int position) {
         return infoExerciseModelList.get(position).getTypeTraining();
     }
 
@@ -100,13 +107,15 @@ public class HistoryExerciseAdapter extends BaseAdapter{
         private TextView textViewDate;
         private TextView textViewTraining;
         private TextView textViewWeight;
+        private Button buttonViewSet;
         private Button buttonRepeatSet;
 
-        private ViewHolder(View container, int idTextViewDate, int idTextViewTraining, int idTextViewWeight, int idButtonRepeatSet) {
+        private ViewHolder(View container, int idTextViewDate, int idTextViewTraining, int idTextViewWeight, int idButtonViewSet, int idButtonRepeatSet) {
 
             textViewDate = (TextView) container.findViewById(idTextViewDate);
             textViewTraining = (TextView) container.findViewById(idTextViewTraining);
             textViewWeight = (TextView) container.findViewById(idTextViewWeight);
+            buttonViewSet = (Button) container.findViewById(idButtonViewSet);
             buttonRepeatSet = (Button) container.findViewById(idButtonRepeatSet);
         }
 
@@ -122,9 +131,17 @@ public class HistoryExerciseAdapter extends BaseAdapter{
             return textViewWeight;
         }
 
-        public Button getButtonRepeatSet() {
-            return buttonRepeatSet;
+
+        public void setButtonViewSetListener(View.OnClickListener listener, int position) {
+            buttonViewSet.setOnClickListener(listener);
+            buttonViewSet.setTag(position);
         }
+
+        public void setButtonRepetaSetListener(View.OnClickListener listener, int position) {
+            buttonRepeatSet.setOnClickListener(listener);
+            buttonRepeatSet.setTag(position);
+        }
+
     }
 
 

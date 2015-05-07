@@ -15,7 +15,7 @@
     <string name="device_detaches">Device detached!</string>
     <string name="no_device_found">No device found!</string>
     <string name="found">found!</string>
-    <string name="title_exit">Salir</string>
+    <string name="title_exit">xSalir</string>
     <string name="message_exit">¿Desea salir de Ejercicio?</string>
     <string name="device_found">Device found!</string>
     <string name="btn_title_next_set">Nex Set</string>
@@ -53,7 +53,7 @@
     <string name="tex_history">History</string>
     <string name="btn_new_set">New Set</string>
     <string name="text_date">Date</string>
-    <string name="tex_training_system">Training System:</string>
+    <string name="tex_training_system">Training System</string>
     <string name="tex_weight">Weight</string>
     <string name="btn_repeat_set">Repeat Set</string>
     <string name="text_title_loaded_weight">Enter Loaded Weight:</string>
@@ -104,6 +104,10 @@
     <string name="message_no_more_weight">No se puede colocar otro peso</string>
     <string name="message_select_trainig">Por favor elija un tipo de Entrenamiento</string>
     <string name="warning_message_weight_min_drop_neg">Coloque un peso mayor o igual a 5 lb</string>
+    <string name="text_hint_name_exercise">Exercise Name</string>
+    <string name="title_other_excercise">Other Exercise</string>
 
+    <string name="message_other_exercise">Por favor coloque el nombre de su ejercicio</string>
+    <string name="btn_view_set">View Set</string>
 
 </resources>

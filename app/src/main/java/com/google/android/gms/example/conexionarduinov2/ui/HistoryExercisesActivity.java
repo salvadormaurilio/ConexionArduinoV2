@@ -68,7 +68,12 @@ public class HistoryExercisesActivity extends ActionBarActivity implements Histo
     }
 
     @Override
-    public void onOpenExercise(int position) {
+    public void onOpenViewSet(int position) {
+
+    }
+
+    @Override
+    public void onOpenNewSet(int position) {
         Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
         intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
         intent.putExtra(Constans.ID_EXERCISE, exerciseAdapter.getIdExercise(position));

@@ -42,4 +42,5 @@ public class Constans {
     public static final String EXTRA_TYPE_TRAINING = "type_training";
     public static final String ID_EXERCISE_FRAG = "id_exercise_frag";
     public static final String TAG_DB = "TAG_DB";
+    public static final String EXTRA_OTHER_EXERCISE = "other_exercise";
 }

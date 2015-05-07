@@ -1,4 +1,4 @@
-package com.google.android.gms.example.conexionarduinov2.database;
+package com.google.android.gms.example.conexionarduinov2.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -24,10 +24,17 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        clearSharedPrferences();
+
         findViewById(R.id.buttonLogin).setOnClickListener(this);
         findViewById(R.id.buttonRegister).setOnClickListener(this);
         findViewById(R.id.buttonGuest).setOnClickListener(this);
 
+    }
+
+    private void clearSharedPrferences() {
+        SharedPreferences.Editor editor = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE).edit();
+        editor.clear().apply();
     }
 
     @Override
@@ -81,7 +88,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
                 Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
                 startActivity(intent);
-                finish();
                 Toast.makeText(LoginActivity.this, getString(R.string.message_welcome) + " " + userName, Toast.LENGTH_LONG).show();
 
             } else {
@@ -114,7 +120,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
                     Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
                     startActivity(intent);
-                    finish();
                     Toast.makeText(LoginActivity.this, getString(R.string.message_welcome) + " " + userName, Toast.LENGTH_LONG).show();
                 } else {
                     showLoginDialog(userName);
