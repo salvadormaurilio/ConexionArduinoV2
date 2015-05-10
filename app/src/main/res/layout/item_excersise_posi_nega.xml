@@ -24,32 +24,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textViewNegativeWeight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/back_textview_posi_nega"
-            android:gravity="center"
-            android:longClickable="false"
-            android:padding="12dp"
-            android:singleLine="true"
-            android:text="12 lb"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textViewPositiveWeight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/back_textview_posi_nega"
-            android:gravity="center"
-            android:longClickable="false"
-            android:padding="12dp"
-            android:singleLine="true"
-            android:text="14 lb"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/textViewNumRep"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

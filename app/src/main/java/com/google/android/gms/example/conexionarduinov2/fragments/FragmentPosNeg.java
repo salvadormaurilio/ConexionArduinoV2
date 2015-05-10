@@ -8,43 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.gms.example.conexionarduinov2.R;
-import com.google.android.gms.example.conexionarduinov2.adapters.AdapterNegativePositive;
-import com.google.android.gms.example.conexionarduinov2.dialogs.DialogWeight;
-import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
-import com.google.android.gms.example.conexionarduinov2.database.TrainingDataSource;
-import com.google.android.gms.example.conexionarduinov2.utils.Constans;
-import com.google.android.gms.example.conexionarduinov2.utils.EventsOnFragment;
-import com.google.android.gms.example.conexionarduinov2.utils.OnConexiWithActivity;
-import com.google.android.gms.example.conexionarduinov2.utils.OnNewWeightFromDialog;
-import com.google.android.gms.example.conexionarduinov2.utils.PlaceWeightListener;
-import com.melnykov.fab.FloatingActionButton;
-
-import java.util.Calendar;
+import com.google.android.gms.example.conexionarduinov2.adapters.AdapterDropsetAndNegative;
+import com.google.android.gms.example.conexionarduinov2.utils.interfaces.EventsOnFragment;
+import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConexiWithActivity;
 
 /**
  * Created by sati on 15/02/2015.
  */
-public class FragmentPosNeg extends Fragment implements PlaceWeightListener, EventsOnFragment, OnNewWeightFromDialog {
+public class FragmentPosNeg extends Fragment implements EventsOnFragment {
 
-    private AdapterNegativePositive adapterNegativePositive;
-    private ListView listViewPosNeg;
+    private AdapterDropsetAndNegative adapterDropsetAndNegative;
+    private ListView listViewDropset;
     private OnConexiWithActivity onConexiWithActivity;
-    private FloatingActionButton floatingActionButton;
 
 
-    public FragmentPosNeg() {
-    }
-
-    public static FragmentPosNeg newInstance(long idExercise) {
-        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
-        Bundle bundle = new Bundle();
-        bundle.putLong(Constans.ID_EXERCISE_FRAG, idExercise);
-        fragmentPosNeg.setArguments(bundle);
-        return fragmentPosNeg;
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -61,102 +40,53 @@ public class FragmentPosNeg extends Fragment implements PlaceWeightListener, Eve
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        listViewDropset = (ListView) view.findViewById(R.id.listViewTable);
 
-        listViewPosNeg = (ListView) view.findViewById(R.id.listViewTable);
-
-        Bundle bundle = getArguments();
-        if (getArguments() != null) {
-            TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
-            adapterNegativePositive = new AdapterNegativePositive(getActivity(), this,
-                    trainingDataSource.queryTrainingNegativePositive(bundle.getLong(Constans.ID_EXERCISE_FRAG)));
-        } else {
-            adapterNegativePositive = new AdapterNegativePositive(getActivity(), this);
-        }
-
-        listViewPosNeg.setAdapter(adapterNegativePositive);
+        adapterDropsetAndNegative = new AdapterDropsetAndNegative(getActivity(), 2);
+        listViewDropset.setAdapter(adapterDropsetAndNegative);
 
     }
 
-    @Override
-    public void onDialogoInputWeight(int minWeight, int maxWeight, boolean isNegative) {
-        DialogWeight dialogWeight = DialogWeight.newInstance(minWeight, maxWeight, isNegative);
-        dialogWeight.setOnNewWeightFromDialog(this);
-        dialogWeight.show(getFragmentManager(), "dia_wei");
-    }
-
-
-    @Override
-    public void onSetWeight(int weight) {
-        adapterNegativePositive.setNewWeightInitial(weight);
-    }
 
     @Override
     public void onStartExercise() {
-        if (adapterNegativePositive.isFullTable()) {
-            onConexiWithActivity.OnStart();
-            initExercise();
-        } else {
-            Toast.makeText(getActivity(), R.string.warning_message_full_table, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void initExercise() {
-        adapterNegativePositive.setClickable(false);
-        listViewPosNeg.setItemChecked(adapterNegativePositive.getPositionItemPositiveNegatives(), true);
-        floatingActionButton.setOnClickListener(null);
-
-    }
-
-    @Override
-    public void onClearWeight() {
-        adapterNegativePositive.setNewWeightInitial(0);
+        listViewDropset.setItemChecked(adapterDropsetAndNegative.getPositionItem(), true);
+        onConexiWithActivity.OnStart();
     }
 
     @Override
     public void nextWeight() {
-        if (adapterNegativePositive.getPositionItemPositiveNegatives() < adapterNegativePositive.getCount()) {
-            adapterNegativePositive.incrementItemPosition();
-            listViewPosNeg.setItemChecked(adapterNegativePositive.getPositionItemPositiveNegatives(), true);
+        if (adapterDropsetAndNegative.getPositionItem() < adapterDropsetAndNegative.getCount()-1) {
+            adapterDropsetAndNegative.incrementItemPosition();
+            listViewDropset.setItemChecked(adapterDropsetAndNegative.getPositionItem(), true);
         }
-
     }
 
     @Override
     public void incrementRep() {
-        adapterNegativePositive.incrementRepetitions();
+        adapterDropsetAndNegative.incrementRepetitions();
     }
-
-    @Override
-    public void onNewWeghtFromDialog(int weight) {
-        adapterNegativePositive.setWeight(weight);
-    }
-
-    @Override
-    public void createNewDialog(int minWeight, int maxWight, boolean isNegative) {
-        DialogWeight dialogWeight = DialogWeight.newInstance(minWeight,maxWight,isNegative);
-        dialogWeight.setOnNewWeightFromDialog(this);
-        dialogWeight.show(getFragmentManager(), "dia_wei");
-    }
-
 
     @Override
     public void saveExercise(long idUser, int typeExercise) {
-        Calendar calendar = Calendar.getInstance();
-        String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
 
-        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
-        long idExercise = exercisesDataSource.insertExercise(idUser, typeExercise, 1, date, adapterNegativePositive.getWeightInitial());
+//        Calendar calendar = Calendar.getInstance();
+//        String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
+//
+//        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
+//        long idExercise = exercisesDataSource.insertExercise(idUser, typeExercise, 0, date, adapterDropsetAndNegative.getWeightInitial());
+//
+//        TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
+//
+//        trainingDataSource.insertTrainingDropsetNegative(idExercise, adapterDropsetAndNegative.getWeights(), 0);
 
-        TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
-
-        trainingDataSource.insertTrainingNegativePositive(idExercise, adapterNegativePositive.getItemPositiveNegatives());
     }
+
 
     @Override
     public void onDetach() {
         super.onDetach();
         onConexiWithActivity = null;
     }
-
 
 }

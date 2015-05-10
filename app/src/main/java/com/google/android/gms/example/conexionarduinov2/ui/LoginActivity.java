@@ -14,7 +14,7 @@ import com.google.android.gms.example.conexionarduinov2.dialogs.LoginUserDialog;
 import com.google.android.gms.example.conexionarduinov2.dialogs.RegiterUserDialog;
 import com.google.android.gms.example.conexionarduinov2.models.UserInfoModel;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
-import com.google.android.gms.example.conexionarduinov2.utils.OnUserInfoListener;
+import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnUserInfoListener;
 
 
 public class LoginActivity extends ActionBarActivity implements View.OnClickListener, OnUserInfoListener {

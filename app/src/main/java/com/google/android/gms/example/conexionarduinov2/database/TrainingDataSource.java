@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
-import com.google.android.gms.example.conexionarduinov2.utils.ItemDropsetNegative;
-import com.google.android.gms.example.conexionarduinov2.utils.ItemPositiveNegative;
+import com.google.android.gms.example.conexionarduinov2.models.ItemDropsetNegative;
+import com.google.android.gms.example.conexionarduinov2.models.ItemPositiveNegative;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +108,7 @@ public class TrainingDataSource {
             String weightsString[] = cursor.getString(0).split("-");
 
             for (String weight : weightsString) {
-                weights.add(new ItemDropsetNegative(Integer.parseInt(weight)));
+                weights.add(new ItemDropsetNegative());
             }
         }
         database.close();

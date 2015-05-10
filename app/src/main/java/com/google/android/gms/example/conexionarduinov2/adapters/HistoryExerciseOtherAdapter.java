@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by sati on 08/02/2015.
  */
-public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickListener, HistoryExerciseInterface {
+public class HistoryExerciseOtherAdapter extends BaseAdapter implements View.OnClickListener, HistoryExerciseInterface {
 
 
     private List<InfoExerciseModel> infoExerciseModelList;
@@ -27,7 +27,7 @@ public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickL
     private OnOpenExerciseListener onOpenExerciseListener;
 
 
-    public HistoryExerciseAdapter(Context context,  OnOpenExerciseListener onOpenExerciseListener) {
+    public HistoryExerciseOtherAdapter(Context context, OnOpenExerciseListener onOpenExerciseListener) {
         inflater = LayoutInflater.from(context);
         this.infoExerciseModelList = new ArrayList<>();
         this.onOpenExerciseListener = onOpenExerciseListener;
@@ -56,8 +56,8 @@ public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickL
 
 
         if (view == null) {
-            view = inflater.inflate(R.layout.item_listview_history_exercise, parent, false);
-            viewHolder = new ViewHolder(view, R.id.textViewDate, R.id.textViewTraining, R.id.textViewWeight, R.id.buttonViewSet, R.id.buttonViewRepeatSet);
+            view = inflater.inflate(R.layout.item_listview_history_exercise_other, parent, false);
+            viewHolder = new ViewHolder(view, R.id.textViewDate, R.id.textViewNameExercise, R.id.textViewTraining, R.id.textViewWeight, R.id.buttonViewSet, R.id.buttonViewRepeatSet);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -66,11 +66,11 @@ public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickL
         InfoExerciseModel exerciseModel = infoExerciseModelList.get(position);
 
         viewHolder.getTextViewDate().setText(exerciseModel.getDate());
+        viewHolder.getTextViewName().setText(exerciseModel.getName());
         viewHolder.getTextViewTraining().setText(exerciseModel.getTraining());
         viewHolder.getTextViewWeight().setText(exerciseModel.getWeight() + " lb");
-        viewHolder.setButtonViewSetListener(HistoryExerciseAdapter.this, position);
-        viewHolder.setButtonRepetaSetListener(HistoryExerciseAdapter.this, position);
-
+        viewHolder.setButtonViewSetListener(HistoryExerciseOtherAdapter.this, position);
+        viewHolder.setButtonRepetaSetListener(HistoryExerciseOtherAdapter.this, position);
         return view;
     }
 
@@ -80,9 +80,9 @@ public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickL
         int position = (int) v.getTag();
 
         if (v.getId() == R.id.buttonViewSet) {
-//            onOpenExerciseListener.onViewSet(position);
+            onOpenExerciseListener.onViewSet(position);
         } else {
-//            onOpenExerciseListener.onRepeatSet(position);
+            onOpenExerciseListener.onRepeatSet(position);
         }
     }
 
@@ -106,14 +106,16 @@ public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickL
 
     private static class ViewHolder {
         private TextView textViewDate;
+        private TextView textViewName;
         private TextView textViewTraining;
         private TextView textViewWeight;
         private Button buttonViewSet;
         private Button buttonRepeatSet;
 
-        private ViewHolder(View container, int idTextViewDate, int idTextViewTraining, int idTextViewWeight, int idButtonViewSet, int idButtonRepeatSet) {
+        private ViewHolder(View container, int idTextViewDate, int idTextViewName, int idTextViewTraining, int idTextViewWeight, int idButtonViewSet, int idButtonRepeatSet) {
 
             textViewDate = (TextView) container.findViewById(idTextViewDate);
+            textViewName = (TextView) container.findViewById(idTextViewName);
             textViewTraining = (TextView) container.findViewById(idTextViewTraining);
             textViewWeight = (TextView) container.findViewById(idTextViewWeight);
             buttonViewSet = (Button) container.findViewById(idButtonViewSet);
@@ -122,6 +124,10 @@ public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickL
 
         public TextView getTextViewDate() {
             return textViewDate;
+        }
+
+        public TextView getTextViewName() {
+            return textViewName;
         }
 
         public TextView getTextViewTraining() {

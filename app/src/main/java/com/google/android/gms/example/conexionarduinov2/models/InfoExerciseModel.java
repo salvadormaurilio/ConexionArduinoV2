@@ -7,6 +7,7 @@ public class InfoExerciseModel {
 
     private long idExercise;
     private String date;
+    private String name;
     private int typeTraining;
     private String training;
     private int weight;
@@ -19,9 +20,25 @@ public class InfoExerciseModel {
         this.weight = weight;
     }
 
+    public InfoExerciseModel(long idExercise, String date, String name, int typeTraining, String training, int weight) {
+        this.idExercise = idExercise;
+        this.date = date;
+        this.name = name;
+        this.typeTraining = typeTraining;
+        this.training = training;
+        this.weight = weight;
+    }
 
     public long getIdExercise() {
         return idExercise;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public int getTypeTraining() {
@@ -30,10 +47,6 @@ public class InfoExerciseModel {
 
     public String getTraining() {
         return training;
-    }
-
-    public String getDate() {
-        return date;
     }
 
     public int getWeight() {

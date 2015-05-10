@@ -17,6 +17,19 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/textViewNameExercise"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/back_item_history_exercise"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Other"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/primary_text_black"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/textViewTraining"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -63,6 +76,7 @@
         android:background="@drawable/back_btn_indigo_stroke"
         android:text="@string/btn_view_set"
         android:textStyle="bold" />
+
 
     <Button
         android:id="@+id/buttonViewRepeatSet"

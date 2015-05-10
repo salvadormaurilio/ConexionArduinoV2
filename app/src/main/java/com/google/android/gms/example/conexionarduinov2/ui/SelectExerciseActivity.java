@@ -17,7 +17,7 @@ import com.google.android.gms.example.conexionarduinov2.dialogs.DialogOtherExerc
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 
 
-public class SelectExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, DialogOtherExercise.OnListenerOtherExercise {
+public class SelectExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,27 +55,7 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
 
     }
 
-    private void showDialogOtherExercise() {
-
-        DialogOtherExercise dialogOtherExercise = new DialogOtherExercise();
-        dialogOtherExercise.show(getSupportFragmentManager(), "");
-
-    }
 
 
-    @Override
-    public void otherExercise(String exercise) {
 
-        if (!TextUtils.isEmpty(exercise)) {
-            Intent intent = new Intent(SelectExerciseActivity.this, HistoryExercisesActivity.class);
-            intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, 7);
-            intent.putExtra(Constans.EXTRA_OTHER_EXERCISE, exercise);
-            startActivity(intent);
-
-        } else {
-            showDialogOtherExercise();
-            Toast.makeText(SelectExerciseActivity.this, R.string.message_other_exercise, Toast.LENGTH_LONG).show();
-        }
-
-    }
 }

@@ -1,4 +1,4 @@
-package com.google.android.gms.example.conexionarduinov2.utils;
+package com.google.android.gms.example.conexionarduinov2.models;
 
 /**
  * Created by sati on 23/10/2014.

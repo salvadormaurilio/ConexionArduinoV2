@@ -54,7 +54,7 @@
     <string name="btn_new_set">New Set</string>
     <string name="text_date">Date</string>
     <string name="tex_training_system">Training System</string>
-    <string name="tex_weight">Weight</string>
+    <string name="text_weight">Weight</string>
     <string name="btn_repeat_set">Repeat Set</string>
     <string name="text_title_loaded_weight">Enter Loaded Weight:</string>
     <string name="text_title_loaded_max_weight">Max. Allowable Weight 720 lb</string>
@@ -100,7 +100,6 @@
     <string name="title_table_negative_weight">Negative</string>
     <string name="title_table_positive_weight">Positive</string>
 
-    <string name="warning_message_full_table">Coloca todos los valores de la Tabla</string>
     <string name="message_no_more_weight">No se puede colocar otro peso</string>
     <string name="message_select_trainig">Por favor elija un tipo de Entrenamiento</string>
     <string name="warning_message_weight_min_drop_neg">Coloque un peso mayor o igual a 5 lb</string>
@@ -109,5 +108,7 @@
 
     <string name="message_other_exercise">Por favor coloque el nombre de su ejercicio</string>
     <string name="btn_view_set">View Set</string>
+    <string name="text_reps">Reps.</string>
+    <string name="tex_name_exercise">Name</string>
 
 </resources>

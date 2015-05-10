@@ -1,4 +1,4 @@
-package com.google.android.gms.example.conexionarduinov2.utils;
+package com.google.android.gms.example.conexionarduinov2.utils.interfaces;
 
 /**
  * Created by sati on 22/02/2015.
@@ -6,11 +6,9 @@ package com.google.android.gms.example.conexionarduinov2.utils;
 
 public interface EventsOnFragment {
 
-    public void onSetWeight(int weight);
 
     public void onStartExercise();
 
-    public void onClearWeight();
 
     public void nextWeight();
 

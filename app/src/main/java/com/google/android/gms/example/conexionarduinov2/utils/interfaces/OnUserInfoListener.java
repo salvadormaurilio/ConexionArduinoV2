@@ -1,4 +1,4 @@
-package com.google.android.gms.example.conexionarduinov2.utils;
+package com.google.android.gms.example.conexionarduinov2.utils.interfaces;
 
 /**
  * Created by sati on 25/01/2015.

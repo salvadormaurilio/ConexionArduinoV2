@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.AdapterHeight;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
-import com.google.android.gms.example.conexionarduinov2.utils.OnUserInfoListener;
+import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnUserInfoListener;
 
 import java.util.ArrayList;
 import java.util.List;
