@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.TrainingAdapter;
+import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
 import com.google.android.gms.example.conexionarduinov2.dialogs.ExitDialog;
 import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionAgainDialog;
@@ -25,24 +26,24 @@ import com.google.android.gms.example.conexionarduinov2.utils.interfaces.EventsO
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConexiWithActivity;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnStartWarmUpSessionEvents;
 
+import java.util.Calendar;
+
 public class ExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener,
         ExitDialog.OnListenerExit, OnConexiWithActivity, OnStartWarmUpSessionEvents {
 
 
     private ListView listViewTraining;
-    private int positionItem;
+    private int typeTraining;
     private int weight;
     private String lb;
     private TextView textViewLoadedWeight;
     private boolean isStart;
     private boolean isExit;
 
-    private boolean isReceivingWeight;
-
-    private int newWeight;
     private EventsOnFragment eventsOnFragment;
     private int minWeight;
     private int typeExercise;
+    private String nameExercise;
 
 
     @Override
@@ -62,11 +63,12 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         listViewTraining.setAdapter(new TrainingAdapter(ExerciseActivity.this, getResources().getStringArray(R.array.trainings)));
         listViewTraining.setOnItemClickListener(this);
 
-        positionItem = -1;
+        typeTraining = -1;
 
         lb = " " + getString(R.string.lb);
         weight = 0;
 
+        nameExercise = "";
 
         textViewLoadedWeight = (TextView) findViewById(R.id.textViewLoadedWeight);
         textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
@@ -78,8 +80,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         findViewById(R.id.buttonWarmUpSession).setOnClickListener(this);
 
         isExit = false;
-        isReceivingWeight = false;
-        newWeight = 0;
         minWeight = 0;
 
         findViewById(R.id.btn_key_0).setOnClickListener(this);
@@ -105,28 +105,32 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         if (bundle != null) {
 
             typeExercise = getIntent().getIntExtra(Constans.EXTRA_TYPE_EXERCISE, 0);
-            long idExercise = bundle.getLong(Constans.ID_EXERCISE, -1);
+            typeTraining = getIntent().getIntExtra(Constans.EXTRA_TYPE_TRAINING, 1);
+            if (typeExercise > 6) {
+                nameExercise = getIntent().getStringExtra(Constans.EXTRA_NAME_EXERCISE);
+            }
 
-            if (idExercise != -1) {
-                int typeTraining = getIntent().getIntExtra(Constans.EXTRA_TYPE_TRAINING, 1);
+            if (typeTraining != -1) {
+                weight = getIntent().getIntExtra(Constans.EXTRA_WEIGHT, 0);
                 switch (typeTraining) {
-                    case 0:
+                    case 1:
+                        minWeight = 5;
                         FragmentDropset fragmentDropset = new FragmentDropset();
                         eventsOnFragment = fragmentDropset;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
                         break;
-                    case 1:
+                    case 2:
+                        minWeight = 2;
                         FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
                         eventsOnFragment = fragmentPosNeg;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
                         break;
                 }
 
-                positionItem = typeTraining;
-                listViewTraining.setItemChecked(positionItem, true);
-                weight = 0;
+                listViewTraining.setItemChecked(this.typeTraining - 1, true);
                 textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
             }
+
         }
     }
 
@@ -135,20 +139,20 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         if (!isStart && !isExit) {
-            if (positionItem != position) {
+            if (typeTraining != position + 1) {
 
-                positionItem = position;
+                typeTraining = position + 1;
                 weight = 0;
                 textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
 
-                switch (positionItem) {
-                    case 0:
+                switch (typeTraining) {
+                    case 1:
                         minWeight = 5;
                         FragmentDropset fragmentDropset = new FragmentDropset();
                         eventsOnFragment = fragmentDropset;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
                         break;
-                    case 1:
+                    case 2:
                         minWeight = 2;
                         FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
                         eventsOnFragment = fragmentPosNeg;
@@ -170,7 +174,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         if (v.getId() != R.id.buttonExit) {
             if (isStart) {
                 return;
-            } else if (positionItem == -1 && v.getId() != R.id.buttonWarmUpSession) {
+            } else if (typeTraining == -1 && v.getId() != R.id.buttonWarmUpSession) {
                 Toast.makeText(ExerciseActivity.this, R.string.message_select_trainig, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -179,7 +183,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
         switch (v.getId()) {
             case R.id.buttonStart:
-                if (positionItem == -1) {
+                if (typeTraining == -1) {
                     Toast.makeText(this, R.string.select_training, Toast.LENGTH_SHORT).show();
                 } else if (weight < minWeight) {
                     Toast.makeText(this, getString(R.string.warning_message_weight_min) + " " + minWeight, Toast.LENGTH_SHORT).show();
@@ -282,7 +286,21 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     private void saveExercise() {
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
-            eventsOnFragment.saveExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, 0), typeExercise);
+
+            ExercisesDataSource exercisesDataSource = new ExercisesDataSource(ExerciseActivity.this);
+
+            Calendar calendar = Calendar.getInstance();
+            String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
+
+            if (typeExercise < 6) {
+                exercisesDataSource.insertExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), date, typeExercise, typeTraining,
+                        eventsOnFragment.getItemRepetions(), weight);
+            } else {
+                exercisesDataSource.insertOtherExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), date, nameExercise, typeExercise, typeTraining,
+                        eventsOnFragment.getItemRepetions(), weight);
+            }
+
+
         }
     }
 

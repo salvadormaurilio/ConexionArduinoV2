@@ -15,9 +15,9 @@ public interface HistoryExerciseInterface {
 
     int getTypeTraining(int position);
 
+    int getWeight(int position);
 
-
-
+    String getNameExercise(int position);
 
 
 }

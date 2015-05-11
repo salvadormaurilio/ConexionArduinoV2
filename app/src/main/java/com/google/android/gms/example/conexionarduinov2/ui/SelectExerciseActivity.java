@@ -48,7 +48,6 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
         } else {
             intent = new Intent(SelectExerciseActivity.this, ExerciseActivity.class);
             intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, position);
-            intent.putExtra(Constans.ID_EXERCISE, -1L);
             intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
         }
         startActivity(intent);

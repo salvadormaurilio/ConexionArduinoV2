@@ -23,24 +23,18 @@ public class Constans {
     public static final String EXTRA_TYPE_EXERCISE = "type_exercise";
 
     public static final String NAME_TABLE_USER_EXERCISES_DB = "user_exercises";
+    public static final String NAME_TABLE_USER_OTHER_EXERCISES_DB = "user_other_exercises";
     public static final String ID_USER_DB = "id_user";
     public static final String TYPE_EXERCISE_DB = "type_exercise";
     public static final String TYPE_TRAINING_DB = "type_training";
     public static final String DATE_DB = "date";
+    public static final String REPETITIONS_DB = "repetitions";
     public static final String WEIGHT_DB = "weight";
-
-    public static final String NAME_TABLE_TRAINING_DROSET_DB = "dropset";
-    public static final String NAME_TABLE_TRAINING_NEGATIVE_DB = "negative";
-    public static final String NAME_TABLE_TRAINING_NEG_POS_DB = "positive_negative";
-
-    public static final String ID_EXERCISE_DB = "id_exercise";
-    public static final String WEIGHTS_DB = "weights";
-    public static final String WEIGHTS_NEGA_DB = "weights_negatives";
-    public static final String WEIGHTS_POSI_DB = "weights_positives";
 
     public static final String ID_EXERCISE = "id_exercise_table";
     public static final String EXTRA_TYPE_TRAINING = "type_training";
-    public static final String ID_EXERCISE_FRAG = "id_exercise_frag";
     public static final String TAG_DB = "TAG_DB";
-    public static final String EXTRA_OTHER_EXERCISE = "other_exercise";
+    public static final String NAME_DB = "name";
+    public static final String EXTRA_WEIGHT = "weight";
+    public static final String EXTRA_NAME_EXERCISE = "name_exercise";
 }

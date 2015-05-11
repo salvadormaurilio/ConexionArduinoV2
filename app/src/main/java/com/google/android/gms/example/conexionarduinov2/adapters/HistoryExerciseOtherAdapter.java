@@ -57,7 +57,7 @@ public class HistoryExerciseOtherAdapter extends BaseAdapter implements View.OnC
 
         if (view == null) {
             view = inflater.inflate(R.layout.item_listview_history_exercise_other, parent, false);
-            viewHolder = new ViewHolder(view, R.id.textViewDate, R.id.textViewNameExercise, R.id.textViewTraining, R.id.textViewWeight, R.id.buttonViewSet, R.id.buttonViewRepeatSet);
+            viewHolder = new ViewHolder(view, R.id.textViewDate, R.id.textViewNameExercise, R.id.textViewTraining, R.id.textViewWeight, R.id.textViewNumRep, R.id.buttonViewSet, R.id.buttonViewRepeatSet);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -69,6 +69,7 @@ public class HistoryExerciseOtherAdapter extends BaseAdapter implements View.OnC
         viewHolder.getTextViewName().setText(exerciseModel.getName());
         viewHolder.getTextViewTraining().setText(exerciseModel.getTraining());
         viewHolder.getTextViewWeight().setText(exerciseModel.getWeight() + " lb");
+        viewHolder.getTextViewNumRep().setText(exerciseModel.getRepetitions());
         viewHolder.setButtonViewSetListener(HistoryExerciseOtherAdapter.this, position);
         viewHolder.setButtonRepetaSetListener(HistoryExerciseOtherAdapter.this, position);
         return view;
@@ -103,21 +104,33 @@ public class HistoryExerciseOtherAdapter extends BaseAdapter implements View.OnC
         return infoExerciseModelList.get(position).getTypeTraining();
     }
 
+    @Override
+    public int getWeight(int position) {
+        return infoExerciseModelList.get(position).getWeight();
+    }
+
+    @Override
+    public String getNameExercise(int position) {
+        return infoExerciseModelList.get(position).getName();
+    }
+
 
     private static class ViewHolder {
         private TextView textViewDate;
         private TextView textViewName;
         private TextView textViewTraining;
         private TextView textViewWeight;
+        private TextView textViewNumRep;
         private Button buttonViewSet;
         private Button buttonRepeatSet;
 
-        private ViewHolder(View container, int idTextViewDate, int idTextViewName, int idTextViewTraining, int idTextViewWeight, int idButtonViewSet, int idButtonRepeatSet) {
+        private ViewHolder(View container, int idTextViewDate, int idTextViewName, int idTextViewTraining, int idTextViewWeight, int idtextViewNumRep, int idButtonViewSet, int idButtonRepeatSet) {
 
             textViewDate = (TextView) container.findViewById(idTextViewDate);
             textViewName = (TextView) container.findViewById(idTextViewName);
             textViewTraining = (TextView) container.findViewById(idTextViewTraining);
             textViewWeight = (TextView) container.findViewById(idTextViewWeight);
+            textViewNumRep = (TextView) container.findViewById(idtextViewNumRep);
             buttonViewSet = (Button) container.findViewById(idButtonViewSet);
             buttonRepeatSet = (Button) container.findViewById(idButtonRepeatSet);
         }
@@ -138,6 +151,9 @@ public class HistoryExerciseOtherAdapter extends BaseAdapter implements View.OnC
             return textViewWeight;
         }
 
+        public TextView getTextViewNumRep() {
+            return textViewNumRep;
+        }
 
         public void setButtonViewSetListener(View.OnClickListener listener, int position) {
             buttonViewSet.setOnClickListener(listener);

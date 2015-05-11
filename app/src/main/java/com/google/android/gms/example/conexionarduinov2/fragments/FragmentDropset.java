@@ -11,8 +11,11 @@ import android.widget.ListView;
 
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.DropsetAndNegativeAdapter;
+import com.google.android.gms.example.conexionarduinov2.models.ItemDropsetAndNegativePositive;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConexiWithActivity;
+
+import java.util.List;
 
 /**
  * Created by sati on 15/02/2015.
@@ -69,21 +72,8 @@ public class FragmentDropset extends Fragment implements EventsOnFragment {
     }
 
     @Override
-    public void saveExercise(long idUser, int typeExercise) {
-
-//        long idExercise = exercisesDataSource.insertExercise(idUser, typeExercise, 0, date, adapterDropsetAndNegative.getWeightInitial());
-
-
-//        Calendar calendar = Calendar.getInstance();
-//        String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
-//
-//        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
-//        long idExercise = exercisesDataSource.insertExercise(idUser, typeExercise, 0, date, adapterDropsetAndNegative.getWeightInitial());
-//
-//        TrainingDataSource trainingDataSource = new TrainingDataSource(getActivity());
-//
-//        trainingDataSource.insertTrainingDropsetNegative(idExercise, adapterDropsetAndNegative.getWeights(), 0);
-
+    public List<ItemDropsetAndNegativePositive> getItemRepetions() {
+        return dropsetAndNegativeAdapter.getItemDropsetAndNegativePositives();
     }
 
 

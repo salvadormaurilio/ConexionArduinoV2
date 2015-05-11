@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.DropsetAndNegativeAdapter;
+import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
+import com.google.android.gms.example.conexionarduinov2.models.InfoExerciseModel;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 
 public class ViewSetActivity extends ActionBarActivity implements View.OnClickListener {
@@ -32,10 +34,19 @@ public class ViewSetActivity extends ActionBarActivity implements View.OnClickLi
         findViewById(R.id.buttonExit).setOnClickListener(ViewSetActivity.this);
         ListView listViewTable = (ListView) findViewById(R.id.listViewTable);
 
-        textViewTypeTraining.setText("Dropset");
-        textViewLoadedWeight.setText(getString(R.string.text_loaded_weight) + " " + 123 + " " + getString(R.string.lb));
+        long idExercise = getIntent().getLongExtra(Constans.ID_EXERCISE, 0);
+        int typerExercise = getIntent().getIntExtra(Constans.EXTRA_TYPE_EXERCISE, 0);
 
-        DropsetAndNegativeAdapter dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(ViewSetActivity.this, 1);
+        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(ViewSetActivity.this);
+
+        InfoExerciseModel infoExerciseModel = typerExercise < 7 ?
+                exercisesDataSource.queryExercise(ViewSetActivity.this, idExercise, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1))
+                : exercisesDataSource.queryOtherExercise(ViewSetActivity.this, idExercise, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1));
+
+        textViewTypeTraining.setText(infoExerciseModel.getTraining());
+        textViewLoadedWeight.setText(getString(R.string.text_loaded_weight) + " " + infoExerciseModel.getWeight() + " " + getString(R.string.lb));
+
+        DropsetAndNegativeAdapter dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(ViewSetActivity.this, infoExerciseModel.getTypeTraining(), infoExerciseModel.getItemDropsetAndNegativePositives());
         listViewTable.setAdapter(dropsetAndNegativeAdapter);
 
 

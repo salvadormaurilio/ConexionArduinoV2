@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.HistoryExerciseAdapter;
 import com.google.android.gms.example.conexionarduinov2.adapters.HistoryExerciseOtherAdapter;
+import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
 import com.google.android.gms.example.conexionarduinov2.dialogs.OtherExerciseDialog;
 import com.google.android.gms.example.conexionarduinov2.models.InfoExerciseModel;
@@ -22,7 +23,6 @@ import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.HistoryExerciseInterface;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnOpenExerciseListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryExercisesActivity extends ActionBarActivity implements OnOpenExerciseListener, View.OnClickListener,
@@ -54,8 +54,6 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
 
         ListView listView = (ListView) findViewById(R.id.listViewHistoryExercises);
 
-//        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(HistoryExercisesActivity.this);
-//        List<InfoExerciseModel> infoExerciseList = exercisesDataSource.queryExercises(HistoryExercisesActivity.this, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), typeExercise);
         BaseAdapter exerciseAdapter;
 
         exerciseAdapter = typeExercise < 7 ?
@@ -73,35 +71,14 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     protected void onResume() {
         super.onResume();
 
-        List<InfoExerciseModel> infoExerciseList = typeExercise < 7 ? loadHarcodExercise() : loadHarcodExerciseOther();
+        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(HistoryExercisesActivity.this);
+
+        List<InfoExerciseModel> infoExerciseList = typeExercise < 7 ? exercisesDataSource.queryExercises(HistoryExercisesActivity.this, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), typeExercise)
+                : exercisesDataSource.queryOtherExercises(HistoryExercisesActivity.this, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), typeExercise);
         historyExerciseInterface.setInfoExerciseModelList(infoExerciseList);
 
-//        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
-//        ExercisesDataSource exercisesDataSource = new ExercisesDataSource(HistoryExercisesActivity.this);
-//        List<InfoExerciseModel> infoExerciseList = exercisesDataSource.queryExercises(HistoryExercisesActivity.this, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), typeExercise);
-//        historyExerciseInterface.setInfoExerciseModelList(infoExerciseList);
 
-    }
-
-
-    private List<InfoExerciseModel> loadHarcodExercise() {
-        List<InfoExerciseModel> infoExerciseModels = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            infoExerciseModels.add(new InfoExerciseModel(1, 0, "Dropset", "7/5/2015", 10 * i));
-        }
-
-        return infoExerciseModels;
-    }
-
-    private List<InfoExerciseModel> loadHarcodExerciseOther() {
-        List<InfoExerciseModel> infoExerciseModels = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            infoExerciseModels.add(new InfoExerciseModel(1, "7/5/2015", "Exercise " + i, 0, "Dropset", 10 * i));
-        }
-
-        return infoExerciseModels;
     }
 
 
@@ -109,6 +86,8 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     public void onViewSet(int position) {
 
         Intent intent = new Intent(HistoryExercisesActivity.this, ViewSetActivity.class);
+        intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
+        intent.putExtra(Constans.ID_EXERCISE, historyExerciseInterface.getIdExercise(position));
         startActivity(intent);
 
     }
@@ -116,13 +95,18 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     @Override
     public void onRepeatSet(int position) {
 
-//        Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
-//        intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
-//        intent.putExtra(Constans.ID_EXERCISE, historyExerciseInterface.getIdExercise(position));
-//        intent.putExtra(Constans.EXTRA_TYPE_TRAINING, historyExerciseInterface.getTypeTraining(position));
-//        startActivity(intent);
+        Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
+        intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
+        intent.putExtra(Constans.EXTRA_WEIGHT, historyExerciseInterface.getWeight(position));
+        intent.putExtra(Constans.EXTRA_TYPE_TRAINING, historyExerciseInterface.getTypeTraining(position));
 
-        newExercise();
+        if (typeExercise > 6) {
+            intent.putExtra(Constans.EXTRA_NAME_EXERCISE, historyExerciseInterface.getTypeTraining(position));
+        }
+
+
+        startActivity(intent);
+
 
     }
 
@@ -130,21 +114,14 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     public void onClick(View v) {
 
         if (typeExercise < 7) {
-            newExercise();
+            Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
+            intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
+            intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
+            startActivity(intent);
         } else {
             showDialogOtherExercise();
         }
     }
-
-
-    private void newExercise() {
-        Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
-        intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
-        intent.putExtra(Constans.ID_EXERCISE, -1L);
-        intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
-        startActivity(intent);
-    }
-
 
     private void showDialogOtherExercise() {
 
@@ -157,7 +134,12 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     public void otherExercise(String exercise) {
 
         if (!TextUtils.isEmpty(exercise)) {
-            newExercise();
+            Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
+            intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
+            intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
+            intent.putExtra(Constans.EXTRA_NAME_EXERCISE, exercise);
+            startActivity(intent);
+
         } else {
             showDialogOtherExercise();
             Toast.makeText(HistoryExercisesActivity.this, R.string.message_other_exercise, Toast.LENGTH_LONG).show();

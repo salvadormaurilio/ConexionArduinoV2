@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.example.conexionarduinov2.R;
-import com.google.android.gms.example.conexionarduinov2.models.ItemDropsetNegative;
+import com.google.android.gms.example.conexionarduinov2.models.ItemDropsetAndNegativePositive;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class DropsetAndNegativeAdapter extends BaseAdapter {
 
-    private List<ItemDropsetNegative> itemDropsetNegatives;
+    private List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives;
     private LayoutInflater inflater;
     private String[] arrayWeights;
     private String repetition;
@@ -29,15 +29,15 @@ public class DropsetAndNegativeAdapter extends BaseAdapter {
 
 
     public DropsetAndNegativeAdapter(Context context, int typeItem) {
-        this.itemDropsetNegatives = typeItem == 1 ? ItemDropsetNegative.creataArrayDropset() : ItemDropsetNegative.creataArrayPositiveNegative();
+        this.itemDropsetAndNegativePositives = typeItem == 1 ? ItemDropsetAndNegativePositive.creataArrayDropset() : ItemDropsetAndNegativePositive.creataArrayPositiveNegative();
 
         initAttributes(context, typeItem);
     }
 
 
 
-    public DropsetAndNegativeAdapter(Context context, int typeItem, List<ItemDropsetNegative> itemDropsetNegatives) {
-        this.itemDropsetNegatives = itemDropsetNegatives;
+    public DropsetAndNegativeAdapter(Context context, int typeItem, List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives) {
+        this.itemDropsetAndNegativePositives = itemDropsetAndNegativePositives;
         initAttributes(context, typeItem);
     }
 
@@ -71,14 +71,14 @@ public class DropsetAndNegativeAdapter extends BaseAdapter {
         }
 
         viewHolderDropset.getTextViewNumWeight().setText(arrayWeights[position]);
-        viewHolderDropset.getTextViewNumRep().setText(itemDropsetNegatives.get(position).getRepetitionsCounts() + repetition);
+        viewHolderDropset.getTextViewNumRep().setText(itemDropsetAndNegativePositives.get(position).getRepetitionsCounts() + repetition);
 
         return container;
     }
 
 
     public void incrementRepetitions() {
-        itemDropsetNegatives.get(positionItem).incrementRepetitionsCounts();
+        itemDropsetAndNegativePositives.get(positionItem).incrementRepetitionsCounts();
         notifyDataSetChanged();
     }
 
@@ -90,19 +90,23 @@ public class DropsetAndNegativeAdapter extends BaseAdapter {
         return positionItem;
     }
 
+    public List<ItemDropsetAndNegativePositive> getItemDropsetAndNegativePositives() {
+        return itemDropsetAndNegativePositives;
+    }
+
     @Override
     public int getCount() {
-        return itemDropsetNegatives.size();
+        return itemDropsetAndNegativePositives.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return itemDropsetNegatives.get(position);
+        return itemDropsetAndNegativePositives.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return itemDropsetNegatives.indexOf(itemDropsetNegatives.get(position));
+        return itemDropsetAndNegativePositives.indexOf(itemDropsetAndNegativePositives.get(position));
     }
 
 
