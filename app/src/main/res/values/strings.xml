@@ -15,7 +15,7 @@
     <string name="device_detaches">Device detached!</string>
     <string name="no_device_found">No device found!</string>
     <string name="found">found!</string>
-    <string name="title_exit">xSalir</string>
+    <string name="title_exit">Salir</string>
     <string name="message_exit">¿Desea salir de Ejercicio?</string>
     <string name="device_found">Device found!</string>
     <string name="btn_title_next_set">Nex Set</string>
@@ -89,7 +89,7 @@
     <string name="warning_message_weight_min">Coloque un peso un peso mayor a </string>
     <string name="warning_message_weight_min_pos">Coloque un peso mayor o igual a 2 lb</string>
     <string name="warning_message_weight_min_neg">Coloque un peso negativo en la celda anterior mayor o igual a 2 lb</string>
-    <string name="title_select_training">SELEC TRAINING SYSTEM</string>
+    <string name="title_select_training">SELECT TRAINING SYSTEM</string>
     <string name="warning_message_weight_previous">Coloque un peso en la celda anterior.</string>
 
     <string name="title_dialog_weight">Weight</string>
@@ -110,5 +110,12 @@
     <string name="btn_view_set">View Set</string>
     <string name="text_reps">Reps.</string>
     <string name="tex_name_exercise">Name</string>
+    <string name="text_warm_up_session">Warm Up Session</string>
+    <string name="text_start">Start</string>
+    <string name="text_exit">Exit</string>
+    <string name="text_warming_up">You are warming up</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
+    <string name="text_warming_up_again">Would you like warming up again?</string>
 
 </resources>

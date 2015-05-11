@@ -16,7 +16,7 @@ import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.HistoryExerciseAdapter;
 import com.google.android.gms.example.conexionarduinov2.adapters.HistoryExerciseOtherAdapter;
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
-import com.google.android.gms.example.conexionarduinov2.dialogs.DialogOtherExercise;
+import com.google.android.gms.example.conexionarduinov2.dialogs.OtherExerciseDialog;
 import com.google.android.gms.example.conexionarduinov2.models.InfoExerciseModel;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.HistoryExerciseInterface;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryExercisesActivity extends ActionBarActivity implements OnOpenExerciseListener, View.OnClickListener,
-        DialogOtherExercise.OnListenerOtherExercise {
+        OtherExerciseDialog.OnListenerOtherExercise {
 
     private HistoryExerciseInterface historyExerciseInterface;
     private int typeExercise;
@@ -145,8 +145,8 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
 
     private void showDialogOtherExercise() {
 
-        DialogOtherExercise dialogOtherExercise = new DialogOtherExercise();
-        dialogOtherExercise.show(getSupportFragmentManager(), "");
+        OtherExerciseDialog otherExerciseDialog = new OtherExerciseDialog();
+        otherExerciseDialog.show(getSupportFragmentManager(), "");
 
     }
 

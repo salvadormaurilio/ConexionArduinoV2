@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,15 +14,19 @@ import android.widget.Toast;
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.TrainingAdapter;
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
-import com.google.android.gms.example.conexionarduinov2.dialogs.DialogExit;
+import com.google.android.gms.example.conexionarduinov2.dialogs.ExitDialog;
+import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionAgainDialog;
+import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionProgressDialog;
+import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionStartDialog;
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentDropset;
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentPosNeg;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConexiWithActivity;
+import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnStartWarmUpSessionEvents;
 
 public class ExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener,
-        DialogExit.OnListenerExit, OnConexiWithActivity {
+        ExitDialog.OnListenerExit, OnConexiWithActivity, OnStartWarmUpSessionEvents {
 
 
     private ListView listViewTraining;
@@ -72,6 +75,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
         findViewById(R.id.buttonStart).setOnClickListener(this);
         findViewById(R.id.buttonExit).setOnClickListener(this);
+        findViewById(R.id.buttonWarmUpSession).setOnClickListener(this);
 
         isExit = false;
         isReceivingWeight = false;
@@ -163,12 +167,15 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     public void onClick(View v) {
 //        if ((isExit && v.getId() != R.id.buttonExit) || isStart) {
 
-        if (positionItem == -1 && (v.getId() != R.id.buttonExit)) {
-            Toast.makeText(ExerciseActivity.this, R.string.message_select_trainig, Toast.LENGTH_SHORT).show();
-            return;
-        } else if ((v.getId() != R.id.buttonExit) && isStart) {
-            return;
+        if (v.getId() != R.id.buttonExit) {
+            if (isStart) {
+                return;
+            } else if (positionItem == -1 && v.getId() != R.id.buttonWarmUpSession) {
+                Toast.makeText(ExerciseActivity.this, R.string.message_select_trainig, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
+
 
         switch (v.getId()) {
             case R.id.buttonStart:
@@ -179,6 +186,9 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                 } else {
                     eventsOnFragment.onStartExercise();
                 }
+                break;
+            case R.id.buttonWarmUpSession:
+                showWarnUpSessionStartDialog();
                 break;
             case R.id.buttonExit:
                 exitActivty();
@@ -222,19 +232,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         }
     }
 
-
-    private void exitActivty() {
-        if (isExit) {
-            saveExercise();
-            finish();
-        } else if (isStart) {
-            DialogExit dialogExit = new DialogExit();
-            dialogExit.show(getSupportFragmentManager(), null);
-        } else {
-            finish();
-        }
-    }
-
     public void valueWeight(int num) {
 
         int weightAux;
@@ -257,9 +254,28 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         }
     }
 
+    private void exitActivty() {
+        if (isExit) {
+            saveExercise();
+            finish();
+        } else if (isStart) {
+            ExitDialog exitDialog = new ExitDialog();
+            exitDialog.show(getSupportFragmentManager(), null);
+        } else {
+            finish();
+        }
+    }
+
+
     @Override
     public void OnStart() {
         isStart = true;
+    }
+
+
+    private void showWarnUpSessionStartDialog() {
+        WarmUpSessionStartDialog warmUpSessionStartDialog = new WarmUpSessionStartDialog();
+        warmUpSessionStartDialog.show(getSupportFragmentManager(), null);
     }
 
 
@@ -280,9 +296,32 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
 
     @Override
-    public void onBackPressed() {
-        exitActivty();
+    public void startWarmUpSession() {
+        showWarnUpSessionProgressDialog();
     }
+
+    @Override
+    public void exitWarmUpSession() {
+        showWarnUpSessionAgainDialog();
+    }
+
+    @Override
+    public void againWarmUpSession() {
+        showWarnUpSessionStartDialog();
+    }
+
+
+    private void showWarnUpSessionAgainDialog() {
+        WarmUpSessionAgainDialog warmUpSessionAgainDialog = new WarmUpSessionAgainDialog();
+        warmUpSessionAgainDialog.show(getSupportFragmentManager(), null);
+    }
+
+    private void showWarnUpSessionProgressDialog() {
+        WarmUpSessionProgressDialog warmUpSessionProgressDialog = new WarmUpSessionProgressDialog();
+        warmUpSessionProgressDialog.setCancelable(false);
+        warmUpSessionProgressDialog.show(getSupportFragmentManager(), null);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -312,6 +351,12 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        exitActivty();
     }
 
     @Override
