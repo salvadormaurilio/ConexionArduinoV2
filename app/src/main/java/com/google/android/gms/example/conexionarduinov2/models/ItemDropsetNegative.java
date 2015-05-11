@@ -14,6 +14,10 @@ public class ItemDropsetNegative {
         repetitionsCounts = 0;
     }
 
+    public ItemDropsetNegative(int repetitionsCounts) {
+        this.repetitionsCounts = repetitionsCounts;
+    }
+
     public int getRepetitionsCounts() {
         return repetitionsCounts;
     }
@@ -24,7 +28,7 @@ public class ItemDropsetNegative {
     }
 
 
-    public static final List<ItemDropsetNegative> creataArrayDropset() {
+    public static List<ItemDropsetNegative> creataArrayDropset() {
         List<ItemDropsetNegative> itemDropsetNegatives = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
@@ -34,7 +38,7 @@ public class ItemDropsetNegative {
         return itemDropsetNegatives;
     }
 
-    public static final List<ItemDropsetNegative> creataArrayPositiveNegative() {
+    public static List<ItemDropsetNegative> creataArrayPositiveNegative() {
         List<ItemDropsetNegative> itemDropsetNegatives = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {

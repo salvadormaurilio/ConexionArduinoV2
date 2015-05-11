@@ -108,6 +108,9 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     @Override
     public void onViewSet(int position) {
 
+        Intent intent = new Intent(HistoryExercisesActivity.this, ViewSetActivity.class);
+        startActivity(intent);
+
     }
 
     @Override

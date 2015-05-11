@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * Created by sati on 11/01/2015.
  */
-public class AdapterHeight extends BaseAdapter {
+public class HeightAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater inflater;
     private List<String> units;
 
-    public AdapterHeight(Context context, List<String> units) {
+    public HeightAdapter(Context context, List<String> units) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.units = units;

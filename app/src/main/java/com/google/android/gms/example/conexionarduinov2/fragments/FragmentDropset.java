@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.google.android.gms.example.conexionarduinov2.R;
-import com.google.android.gms.example.conexionarduinov2.adapters.AdapterDropsetAndNegative;
+import com.google.android.gms.example.conexionarduinov2.adapters.DropsetAndNegativeAdapter;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConexiWithActivity;
 
@@ -19,7 +19,7 @@ import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConex
  */
 public class FragmentDropset extends Fragment implements EventsOnFragment {
 
-    private AdapterDropsetAndNegative adapterDropsetAndNegative;
+    private DropsetAndNegativeAdapter dropsetAndNegativeAdapter;
     private ListView listViewDropset;
     private OnConexiWithActivity onConexiWithActivity;
 
@@ -44,32 +44,35 @@ public class FragmentDropset extends Fragment implements EventsOnFragment {
         super.onViewCreated(view, savedInstanceState);
         listViewDropset = (ListView) view.findViewById(R.id.listViewTable);
 
-        adapterDropsetAndNegative = new AdapterDropsetAndNegative(getActivity(), 1);
-        listViewDropset.setAdapter(adapterDropsetAndNegative);
+        dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(getActivity(), 1);
+        listViewDropset.setAdapter(dropsetAndNegativeAdapter);
 
     }
 
     @Override
     public void onStartExercise() {
-        listViewDropset.setItemChecked(adapterDropsetAndNegative.getPositionItem(), true);
+        listViewDropset.setItemChecked(dropsetAndNegativeAdapter.getPositionItem(), true);
         onConexiWithActivity.OnStart();
     }
 
     @Override
     public void nextWeight() {
-        if (adapterDropsetAndNegative.getPositionItem() < adapterDropsetAndNegative.getCount()-1) {
-            adapterDropsetAndNegative.incrementItemPosition();
-            listViewDropset.setItemChecked(adapterDropsetAndNegative.getPositionItem(), true);
+        if (dropsetAndNegativeAdapter.getPositionItem() < dropsetAndNegativeAdapter.getCount()-1) {
+            dropsetAndNegativeAdapter.incrementItemPosition();
+            listViewDropset.setItemChecked(dropsetAndNegativeAdapter.getPositionItem(), true);
         }
     }
 
     @Override
     public void incrementRep() {
-        adapterDropsetAndNegative.incrementRepetitions();
+        dropsetAndNegativeAdapter.incrementRepetitions();
     }
 
     @Override
     public void saveExercise(long idUser, int typeExercise) {
+
+//        long idExercise = exercisesDataSource.insertExercise(idUser, typeExercise, 0, date, adapterDropsetAndNegative.getWeightInitial());
+
 
 //        Calendar calendar = Calendar.getInstance();
 //        String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);

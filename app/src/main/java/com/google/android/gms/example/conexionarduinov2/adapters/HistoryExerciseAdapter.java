@@ -80,9 +80,9 @@ public class HistoryExerciseAdapter extends BaseAdapter implements View.OnClickL
         int position = (int) v.getTag();
 
         if (v.getId() == R.id.buttonViewSet) {
-//            onOpenExerciseListener.onViewSet(position);
+            onOpenExerciseListener.onViewSet(position);
         } else {
-//            onOpenExerciseListener.onRepeatSet(position);
+            onOpenExerciseListener.onRepeatSet(position);
         }
     }
 

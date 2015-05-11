@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.google.android.gms.example.conexionarduinov2.R;
-import com.google.android.gms.example.conexionarduinov2.adapters.AdapterHeight;
+import com.google.android.gms.example.conexionarduinov2.adapters.HeightAdapter;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnUserInfoListener;
 
@@ -34,7 +34,7 @@ public class RegiterUserDialog extends DialogFragment implements RadioGroup.OnCh
 
     private List<String> unitsCm;
     private List<String> unitsFt;
-    private AdapterHeight adapterHeight;
+    private HeightAdapter heightAdapter;
     private String height;
     private int typeUnits;
     private int positionHeight;
@@ -87,8 +87,8 @@ public class RegiterUserDialog extends DialogFragment implements RadioGroup.OnCh
         for (int i = 0; i <= 36; i++) unitsFt.add((3.0 + (i / 10.0)) + "");
 
         spinnerHeight = (Spinner) view.findViewById(R.id.spinnerHeight);
-        adapterHeight = new AdapterHeight(getActivity(), arguments.getInt(Constans.TYPE_UNITS_DIALOG, 1) == 1 ? unitsCm : unitsFt);
-        spinnerHeight.setAdapter(adapterHeight);
+        heightAdapter = new HeightAdapter(getActivity(), arguments.getInt(Constans.TYPE_UNITS_DIALOG, 1) == 1 ? unitsCm : unitsFt);
+        spinnerHeight.setAdapter(heightAdapter);
         spinnerHeight.setOnItemSelectedListener(this);
 
         positionHeight = arguments.getInt(Constans.POSITION_HEIGTH_DIALOG, 0);
@@ -115,7 +115,7 @@ public class RegiterUserDialog extends DialogFragment implements RadioGroup.OnCh
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        height = (String) adapterHeight.getItem(position);
+        height = (String) heightAdapter.getItem(position);
         positionHeight = position;
     }
 
@@ -129,12 +129,12 @@ public class RegiterUserDialog extends DialogFragment implements RadioGroup.OnCh
 
         switch (checkedId) {
             case R.id.radioButtonCm:
-                adapterHeight.setUnits(unitsCm);
+                heightAdapter.setUnits(unitsCm);
                 spinnerHeight.setSelection(0);
                 typeUnits = 1;
                 break;
             case R.id.radioButtonFt:
-                adapterHeight.setUnits(unitsFt);
+                heightAdapter.setUnits(unitsFt);
                 spinnerHeight.setSelection(0);
                 typeUnits = 2;
                 break;

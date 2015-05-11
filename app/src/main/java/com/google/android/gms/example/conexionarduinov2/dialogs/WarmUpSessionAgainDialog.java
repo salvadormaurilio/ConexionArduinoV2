@@ -17,7 +17,6 @@ import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnStart
  */
 public class WarmUpSessionAgainDialog extends DialogFragment {
 
-
     private OnStartWarmUpSessionEvents onStartWarmUpSessionEvents;
 
     @Override

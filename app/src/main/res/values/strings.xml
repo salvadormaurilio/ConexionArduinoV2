@@ -53,7 +53,6 @@
     <string name="tex_history">History</string>
     <string name="btn_new_set">New Set</string>
     <string name="text_date">Date</string>
-    <string name="tex_training_system">Training System</string>
     <string name="text_weight">Weight</string>
     <string name="btn_repeat_set">Repeat Set</string>
     <string name="text_title_loaded_weight">Enter Loaded Weight:</string>
@@ -117,5 +116,8 @@
     <string name="text_yes">Yes</string>
     <string name="text_no">No</string>
     <string name="text_warming_up_again">Would you like warming up again?</string>
+    <string name="title_activity_view_set">ViewSetActivity</string>
+    <string name="text_training_system">Training System</string>
+    <string name="text_loaded_weight">Loaded Weight:</string>
 
 </resources>

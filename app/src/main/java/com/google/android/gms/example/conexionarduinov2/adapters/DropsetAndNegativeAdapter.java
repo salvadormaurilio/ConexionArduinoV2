@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by sati on 22/10/2014.
  */
-public class AdapterDropsetAndNegative extends BaseAdapter {
+public class DropsetAndNegativeAdapter extends BaseAdapter {
 
     private List<ItemDropsetNegative> itemDropsetNegatives;
     private LayoutInflater inflater;
@@ -28,9 +28,20 @@ public class AdapterDropsetAndNegative extends BaseAdapter {
     private int positionItem;
 
 
-    public AdapterDropsetAndNegative(Context context, int typeItem) {
+    public DropsetAndNegativeAdapter(Context context, int typeItem) {
         this.itemDropsetNegatives = typeItem == 1 ? ItemDropsetNegative.creataArrayDropset() : ItemDropsetNegative.creataArrayPositiveNegative();
 
+        initAttributes(context, typeItem);
+    }
+
+
+
+    public DropsetAndNegativeAdapter(Context context, int typeItem, List<ItemDropsetNegative> itemDropsetNegatives) {
+        this.itemDropsetNegatives = itemDropsetNegatives;
+        initAttributes(context, typeItem);
+    }
+
+    private void initAttributes(Context context, int typeItem) {
         this.typeItem = typeItem;
         inflater = LayoutInflater.from(context);
 
@@ -39,6 +50,7 @@ public class AdapterDropsetAndNegative extends BaseAdapter {
         repetition = " " + context.getString(R.string.repetition);
         positionItem = 0;
     }
+
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
