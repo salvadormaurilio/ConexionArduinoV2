@@ -34,7 +34,7 @@ public class ViewSetActivity extends ActionBarActivity implements View.OnClickLi
         findViewById(R.id.buttonExit).setOnClickListener(ViewSetActivity.this);
         ListView listViewTable = (ListView) findViewById(R.id.listViewTable);
 
-        long idExercise = getIntent().getLongExtra(Constans.ID_EXERCISE, 0);
+        long idExercise = getIntent().getLongExtra(Constans.EXTRA_ID_EXERCISE, 0);
         int typerExercise = getIntent().getIntExtra(Constans.EXTRA_TYPE_EXERCISE, 0);
 
         ExercisesDataSource exercisesDataSource = new ExercisesDataSource(ViewSetActivity.this);
@@ -44,7 +44,7 @@ public class ViewSetActivity extends ActionBarActivity implements View.OnClickLi
                 : exercisesDataSource.queryOtherExercise(ViewSetActivity.this, idExercise, sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1));
 
         textViewTypeTraining.setText(infoExerciseModel.getTraining());
-        textViewLoadedWeight.setText(getString(R.string.text_loaded_weight) + " " + infoExerciseModel.getWeight() + " " + getString(R.string.lb));
+        textViewLoadedWeight.setText(infoExerciseModel.getWeight() + " " + getString(R.string.lb));
 
         DropsetAndNegativeAdapter dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(ViewSetActivity.this, infoExerciseModel.getTypeTraining(), infoExerciseModel.getItemDropsetAndNegativePositives());
         listViewTable.setAdapter(dropsetAndNegativeAdapter);

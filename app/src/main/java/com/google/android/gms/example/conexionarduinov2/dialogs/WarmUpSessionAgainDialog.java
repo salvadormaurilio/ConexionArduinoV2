@@ -33,7 +33,7 @@ public class WarmUpSessionAgainDialog extends DialogFragment {
         builder.setTitle(R.string.text_warm_up_session);
 
         TextView textView = (TextView) getActivity().getLayoutInflater().inflate(R.layout.dialog_warm_up_session_start_again, null);
-        textView.setText(R.string.text_warming_up_again);
+        textView.setText(R.string.text_like_to_warming_up_again);
         builder.setView(textView);
 
         builder.setNegativeButton(R.string.text_no, null);

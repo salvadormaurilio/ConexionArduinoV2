@@ -1,80 +1,93 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="com.google.android.gms.example.conexionarduinov2.ui.ExerciseActivity">
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingBottom="4dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        tools:ignore="UselessParent">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/back_title_selec_excer"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:text="@string/text_training_system"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/grey_white"
-            android:textStyle="bold" />
-
-
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/textViewTypeTraining"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
-            android:layout_centerVertical="true"
-            android:layout_margin="16dp"
-            android:background="@drawable/back_select_item_training"
-            android:text="Dropset"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-
-        <TextView
-            android:id="@+id/textViewLoadedWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewTypeTraining"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/back_title_selec_excer"
-            android:padding="12dp"
-            android:text="@string/text_loaded_weight"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold" />
-
-
-        <Button
-            android:id="@+id/buttonExit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/back_btn_login"
-            android:padding="16dp"
-            android:text="@string/btn_exit"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/layoutcontesData"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/back_title_selec_excer"
+                android:padding="12dp"
+                android:singleLine="true"
+                android:text="@string/text_training_system"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/grey_white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/back_title_selec_excer"
+                android:padding="12dp"
+                android:text="@string/text_loaded_weight"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/grey_white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/textViewTypeTraining"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/back_select_item_training"
+                android:text="Dropset"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewLoadedWeight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:text="89 lb"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutcontesData"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_weight="1">
+        android:layout_marginRight="12dp">
 
         <LinearLayout
             android:id="@+id/layoutTitles"
@@ -100,7 +113,7 @@
                 android:background="@drawable/back_title_table_exercise"
                 android:gravity="center"
                 android:padding="12dp"
-                android:text="@string/title_table_num_rep"
+                android:text="@string/title_table_executed_reps"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold" />
 
@@ -117,4 +130,25 @@
     </RelativeLayout>
 
 
-</LinearLayout>
+    <Button
+        android:id="@+id/buttonExit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="12dp"
+        android:background="@drawable/back_btn_login"
+        android:padding="16dp"
+        android:text="@string/btn_exit"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
+
+
+
+
+
+
+
+
+

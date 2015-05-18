@@ -30,11 +30,8 @@ public class DropsetAndNegativeAdapter extends BaseAdapter {
 
     public DropsetAndNegativeAdapter(Context context, int typeItem) {
         this.itemDropsetAndNegativePositives = typeItem == 1 ? ItemDropsetAndNegativePositive.creataArrayDropset() : ItemDropsetAndNegativePositive.creataArrayPositiveNegative();
-
         initAttributes(context, typeItem);
     }
-
-
 
     public DropsetAndNegativeAdapter(Context context, int typeItem, List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives) {
         this.itemDropsetAndNegativePositives = itemDropsetAndNegativePositives;
@@ -93,6 +90,15 @@ public class DropsetAndNegativeAdapter extends BaseAdapter {
     public List<ItemDropsetAndNegativePositive> getItemDropsetAndNegativePositives() {
         return itemDropsetAndNegativePositives;
     }
+
+
+    public void  clearTable ()
+    {
+        itemDropsetAndNegativePositives = typeItem == 1 ? ItemDropsetAndNegativePositive.creataArrayDropset() : ItemDropsetAndNegativePositive.creataArrayPositiveNegative();
+        notifyDataSetChanged();
+
+    }
+
 
     @Override
     public int getCount() {

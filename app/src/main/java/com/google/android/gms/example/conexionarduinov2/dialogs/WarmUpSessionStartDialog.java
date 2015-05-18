@@ -31,10 +31,10 @@ public class WarmUpSessionStartDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.app_name);
+        builder.setTitle(R.string.text_warm_up_session);
 
         TextView textView = (TextView) getActivity().getLayoutInflater().inflate(R.layout.dialog_warm_up_session_start_again, null);
-        textView.setText(R.string.text_warming_up);
+        textView.setText(R.string.text_like_to_warm_up);
         builder.setView(textView);
 
         builder.setNegativeButton(R.string.text_exit, null);

@@ -87,7 +87,7 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
 
         Intent intent = new Intent(HistoryExercisesActivity.this, ViewSetActivity.class);
         intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
-        intent.putExtra(Constans.ID_EXERCISE, historyExerciseInterface.getIdExercise(position));
+        intent.putExtra(Constans.EXTRA_ID_EXERCISE, historyExerciseInterface.getIdExercise(position));
         startActivity(intent);
 
     }
@@ -96,17 +96,16 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     public void onRepeatSet(int position) {
 
         Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
+        intent.putExtra(Constans.EXTRA_ID_EXERCISE, historyExerciseInterface.getIdExercise(position));
         intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
         intent.putExtra(Constans.EXTRA_WEIGHT, historyExerciseInterface.getWeight(position));
         intent.putExtra(Constans.EXTRA_TYPE_TRAINING, historyExerciseInterface.getTypeTraining(position));
 
         if (typeExercise > 6) {
-            intent.putExtra(Constans.EXTRA_NAME_EXERCISE, historyExerciseInterface.getTypeTraining(position));
+            intent.putExtra(Constans.EXTRA_NAME_EXERCISE, historyExerciseInterface.getNameExercise(position));
         }
 
-
         startActivity(intent);
-
 
     }
 

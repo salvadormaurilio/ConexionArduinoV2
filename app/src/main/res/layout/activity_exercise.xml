@@ -288,9 +288,8 @@
             android:id="@+id/containerTraining"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonExit"
-            android:layout_below="@+id/buttonWarmUpSession"
-            android:layout_marginBottom="12dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp" />
 
 

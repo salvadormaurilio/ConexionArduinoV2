@@ -140,7 +140,7 @@ public class ExercisesDataSource {
     public InfoExerciseModel queryExercise(Context context, long idExercise, long idUser) {
 
 
-        Log.d(Constans.TAG_DB, "queryExercises");
+        Log.d(Constans.TAG_DB, "queryExercise");
         Log.d(Constans.TAG_DB, "idUser: " + idUser + ", idExercise: " + idExercise);
 
         InfoExerciseModel infoExerciseModel = null;
@@ -148,11 +148,11 @@ public class ExercisesDataSource {
         SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
 
         String[] columns = new String[]{Constans.DATE_DB, Constans.TYPE_TRAINING_DB, Constans.WEIGHT_DB, Constans.REPETITIONS_DB};
-        Cursor cursor = database.query(Constans.NAME_TABLE_USER_EXERCISES_DB, columns, Constans.ID_DB + " =? AND " + Constans.ID_USER_DB  + " =?", new String[]{idExercise + "", idUser + "",}, null, null, null);
+        Cursor cursor = database.query(Constans.NAME_TABLE_USER_EXERCISES_DB, columns, Constans.ID_DB + " =? AND " + Constans.ID_USER_DB + " =?", new String[]{idExercise + "", idUser + ""}, null, null, null);
 
         if (cursor.moveToFirst()) {
 
-            int typeTraining=cursor.getInt(1);
+            int typeTraining = cursor.getInt(1);
             String[] trainings = context.getResources().getStringArray(R.array.trainings);
             infoExerciseModel = new InfoExerciseModel(cursor.getString(0), typeTraining, trainings[typeTraining - 1], cursor.getInt(2), ItemDropsetAndNegativePositive.toListRepetitions(cursor.getString(3)));
 
@@ -166,7 +166,7 @@ public class ExercisesDataSource {
     public InfoExerciseModel queryOtherExercise(Context context, long idExercise, long idUser) {
 
 
-        Log.d(Constans.TAG_DB, "queryExercises");
+        Log.d(Constans.TAG_DB, "queryExercise");
         Log.d(Constans.TAG_DB, "idUser: " + idUser + ", idExercise: " + idExercise);
 
         InfoExerciseModel infoExerciseModel = null;
@@ -175,7 +175,7 @@ public class ExercisesDataSource {
         SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
 
         String[] columns = new String[]{Constans.DATE_DB, Constans.NAME_DB, Constans.TYPE_TRAINING_DB, Constans.WEIGHT_DB, Constans.REPETITIONS_DB};
-        Cursor cursor = database.query(Constans.NAME_TABLE_USER_OTHER_EXERCISES_DB, columns, Constans.ID_DB + " =? AND " + Constans.ID_USER_DB  + " =?", new String[]{idExercise + "", idUser + "",}, null, null, null);
+        Cursor cursor = database.query(Constans.NAME_TABLE_USER_OTHER_EXERCISES_DB, columns, Constans.ID_DB + " =? AND " + Constans.ID_USER_DB + " =?", new String[]{idExercise + "", idUser + ""}, null, null, null);
 
         if (cursor.moveToFirst()) {
 
@@ -187,6 +187,54 @@ public class ExercisesDataSource {
         database.close();
 
         return infoExerciseModel;
+    }
+
+
+    public List<ItemDropsetAndNegativePositive> queryRepetitions(Context context, long idExercise) {
+
+
+        Log.d(Constans.TAG_DB, "queryExercises");
+        Log.d(Constans.TAG_DB, "idExercise: " + idExercise);
+
+        List<ItemDropsetAndNegativePositive> list = null;
+
+        SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
+
+        String[] columns = new String[]{Constans.REPETITIONS_DB};
+        Cursor cursor = database.query(Constans.NAME_TABLE_USER_EXERCISES_DB, columns, Constans.ID_DB + " =? ", new String[]{idExercise + "",}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+
+            String repetitions = cursor.getString(0);
+            list = ItemDropsetAndNegativePositive.toListRepetitions(repetitions);
+        }
+        database.close();
+
+        return list;
+    }
+
+
+    public List<ItemDropsetAndNegativePositive> queryOtherRepetitions(Context context, long idExercise) {
+
+
+        Log.d(Constans.TAG_DB, "queryExercises");
+        Log.d(Constans.TAG_DB, "idExercise: " + idExercise);
+
+        List<ItemDropsetAndNegativePositive> list = null;
+
+        SQLiteDatabase database = userSQLiteOpenHelper.getReadableDatabase();
+
+        String[] columns = new String[]{Constans.REPETITIONS_DB};
+        Cursor cursor = database.query(Constans.NAME_TABLE_USER_OTHER_EXERCISES_DB, columns, Constans.ID_DB + " =? ", new String[]{idExercise + "",}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+
+            String repetitions = cursor.getString(0);
+            list = ItemDropsetAndNegativePositive.toListRepetitions(repetitions);
+        }
+        database.close();
+
+        return list;
     }
 
 

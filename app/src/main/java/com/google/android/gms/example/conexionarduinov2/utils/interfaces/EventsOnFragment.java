@@ -18,4 +18,7 @@ public interface EventsOnFragment {
 
     List<ItemDropsetAndNegativePositive> getItemRepetions();
 
+    void newWeightOrTraining();
+
+
 }

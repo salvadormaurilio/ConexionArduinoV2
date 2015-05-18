@@ -31,10 +31,12 @@ public class Constans {
     public static final String REPETITIONS_DB = "repetitions";
     public static final String WEIGHT_DB = "weight";
 
-    public static final String ID_EXERCISE = "id_exercise_table";
+    public static final String EXTRA_ID_EXERCISE = "id_exercise_table";
     public static final String EXTRA_TYPE_TRAINING = "type_training";
     public static final String TAG_DB = "TAG_DB";
     public static final String NAME_DB = "name";
     public static final String EXTRA_WEIGHT = "weight";
     public static final String EXTRA_NAME_EXERCISE = "name_exercise";
+    public static final String ARG_ID_EXERCISE = "id_exetcise";
+    public static final String ARG_TYPE_EXERCISE = "type_exercise";
 }

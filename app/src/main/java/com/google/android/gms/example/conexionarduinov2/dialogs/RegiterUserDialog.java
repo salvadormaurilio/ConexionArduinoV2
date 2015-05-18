@@ -83,8 +83,8 @@ public class RegiterUserDialog extends DialogFragment implements RadioGroup.OnCh
         editTextPassword = (EditText) view.findViewById(R.id.editTextPassword);
         editTextConfirmPassWord = (EditText) view.findViewById(R.id.editTextConfirmPassWord);
 
-        for (int i = 0; i <= 100; i++) unitsCm.add((100 + i) + "");
-        for (int i = 0; i <= 36; i++) unitsFt.add((3.0 + (i / 10.0)) + "");
+        for (int i = 0; i <= 61; i++) unitsCm.add((140 + i) + "");
+        for (int i = 0; i <= 21; i++) unitsFt.add((4.5 + (i / 10.0)) + "");
 
         spinnerHeight = (Spinner) view.findViewById(R.id.spinnerHeight);
         heightAdapter = new HeightAdapter(getActivity(), arguments.getInt(Constans.TYPE_UNITS_DIALOG, 1) == 1 ? unitsCm : unitsFt);

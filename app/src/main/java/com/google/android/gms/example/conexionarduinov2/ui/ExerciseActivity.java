@@ -105,7 +105,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         if (bundle != null) {
 
             typeExercise = getIntent().getIntExtra(Constans.EXTRA_TYPE_EXERCISE, 0);
-            typeTraining = getIntent().getIntExtra(Constans.EXTRA_TYPE_TRAINING, 1);
+            typeTraining = getIntent().getIntExtra(Constans.EXTRA_TYPE_TRAINING, -1);
             if (typeExercise > 6) {
                 nameExercise = getIntent().getStringExtra(Constans.EXTRA_NAME_EXERCISE);
             }
@@ -115,13 +115,13 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                 switch (typeTraining) {
                     case 1:
                         minWeight = 5;
-                        FragmentDropset fragmentDropset = new FragmentDropset();
+                        FragmentDropset fragmentDropset = FragmentDropset.newIntance(getIntent().getLongExtra(Constans.EXTRA_ID_EXERCISE, -1), typeExercise);
                         eventsOnFragment = fragmentDropset;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
                         break;
                     case 2:
                         minWeight = 2;
-                        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
+                        FragmentPosNeg fragmentPosNeg = FragmentPosNeg.newIntance(getIntent().getLongExtra(Constans.EXTRA_ID_EXERCISE, -1), typeExercise);
                         eventsOnFragment = fragmentPosNeg;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
                         break;
@@ -231,6 +231,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
                 if (weight > 0) {
                     weight = 0;
                     textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
+                    eventsOnFragment.newWeightOrTraining();
                 }
                 break;
         }
@@ -252,6 +253,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         if (weightAux <= 720) {
             weight = weightAux;
             textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
+            eventsOnFragment.newWeightOrTraining();
 
         } else {
             Toast.makeText(this, R.string.warning_message_weight, Toast.LENGTH_SHORT).show();
@@ -292,7 +294,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             Calendar calendar = Calendar.getInstance();
             String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
 
-            if (typeExercise < 6) {
+            if (typeExercise < 7) {
                 exercisesDataSource.insertExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), date, typeExercise, typeTraining,
                         eventsOnFragment.getItemRepetions(), weight);
             } else {
@@ -309,7 +311,6 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     public void onListenerExit() {
         saveExercise();
         finish();
-
     }
 
 

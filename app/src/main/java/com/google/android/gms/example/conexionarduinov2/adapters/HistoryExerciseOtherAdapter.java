@@ -115,6 +115,7 @@ public class HistoryExerciseOtherAdapter extends BaseAdapter implements View.OnC
     }
 
 
+
     private static class ViewHolder {
         private TextView textViewDate;
         private TextView textViewName;
