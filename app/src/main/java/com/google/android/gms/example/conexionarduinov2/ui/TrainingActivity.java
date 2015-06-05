@@ -1,9 +1,14 @@
 package com.google.android.gms.example.conexionarduinov2.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,13 +27,15 @@ import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionSta
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentDropset;
 import com.google.android.gms.example.conexionarduinov2.fragments.FragmentPosNeg;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
+import com.google.android.gms.example.conexionarduinov2.utils.ConstantsService;
+import com.google.android.gms.example.conexionarduinov2.utils.UsbConexionUtils;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConexiWithActivity;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnStartWarmUpSessionEvents;
 
 import java.util.Calendar;
 
-public class ExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener,
+public class TrainingActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener,
         ExitDialog.OnListenerExit, OnConexiWithActivity, OnStartWarmUpSessionEvents {
 
 
@@ -49,18 +56,18 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise);
+        setContentView(R.layout.activity_training);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
-            UserDataSource userDataSource = new UserDataSource(ExerciseActivity.this);
+            UserDataSource userDataSource = new UserDataSource(TrainingActivity.this);
             getSupportActionBar().setTitle(userDataSource.getUserName(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, 0)));
         }
 
         listViewTraining = (ListView) findViewById(R.id.listViewTraining);
-        listViewTraining.setAdapter(new TrainingAdapter(ExerciseActivity.this, getResources().getStringArray(R.array.trainings)));
+        listViewTraining.setAdapter(new TrainingAdapter(TrainingActivity.this, getResources().getStringArray(R.array.trainings)));
         listViewTraining.setOnItemClickListener(this);
 
         typeTraining = -1;
@@ -94,10 +101,52 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         findViewById(R.id.btn_key_9).setOnClickListener(this);
         findViewById(R.id.btn_key_clear).setOnClickListener(this);
 
-
         obtainExercise();
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConstantsService.DATA_RECEIVED_INTENT);
+        filter.addAction(ConstantsService.USB_DEVICE_DETACHED);
+        registerReceiver(mReceiver, filter);
+
+
     }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (ConstantsService.DEBUG) Log.d(ConstantsService.TAG, "onReceive() " + action);
+            if (ConstantsService.DATA_RECEIVED_INTENT.equals(action)) {
+                final byte[] data = intent.getByteArrayExtra(ConstantsService.DATA_EXTRA);
+
+                switch (data[0]) {
+                    case 0:
+                        isExit = true;
+                        break;
+                    case 1:
+                        if (isStart) {
+                            eventsOnFragment.nextWeight();
+                        }
+                        break;
+                    case 2:
+                        if (isStart) {
+                            eventsOnFragment.incrementRep();
+                        }
+                        break;
+                    case 3:
+                        DialogFragment dialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag("dialog_warp_up");
+                        dialogFragment.dismiss();
+                        showWarnUpSessionAgainDialog();
+                        break;
+                }
+
+            } else if (ConstantsService.USB_DEVICE_DETACHED.equals(action)) {
+                finish();
+            }
+        }
+
+    };
 
     private void obtainExercise() {
 
@@ -111,6 +160,10 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             }
 
             if (typeTraining != -1) {
+
+                if (Constans.IS_ENABLE_SEND_DATA)
+                    UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
+
                 weight = getIntent().getIntExtra(Constans.EXTRA_WEIGHT, 0);
                 switch (typeTraining) {
                     case 1:
@@ -142,6 +195,10 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             if (typeTraining != position + 1) {
 
                 typeTraining = position + 1;
+
+                if (Constans.IS_ENABLE_SEND_DATA)
+                    UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
+
                 weight = 0;
                 textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
 
@@ -175,7 +232,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             if (isStart) {
                 return;
             } else if (typeTraining == -1 && v.getId() != R.id.buttonWarmUpSession) {
-                Toast.makeText(ExerciseActivity.this, R.string.message_select_trainig, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TrainingActivity.this, R.string.message_select_trainig, Toast.LENGTH_SHORT).show();
                 return;
             }
         }
@@ -263,11 +320,15 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     private void exitActivty() {
         if (isExit) {
             saveExercise();
+            if (Constans.IS_ENABLE_SEND_DATA)
+                UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{0});
             finish();
         } else if (isStart) {
             ExitDialog exitDialog = new ExitDialog();
             exitDialog.show(getSupportFragmentManager(), null);
         } else {
+            if (Constans.IS_ENABLE_SEND_DATA)
+                UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{0});
             finish();
         }
     }
@@ -275,6 +336,21 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
 
     @Override
     public void OnStart() {
+
+        if (Constans.IS_ENABLE_SEND_DATA) {
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{4});
+
+            int auxWeight = weight;
+            while (auxWeight > 127) {
+                UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{127});
+                auxWeight -= 127;
+            }
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) auxWeight});
+
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{0});
+
+        }
+
         isStart = true;
     }
 
@@ -289,7 +365,7 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
 
-            ExercisesDataSource exercisesDataSource = new ExercisesDataSource(ExerciseActivity.this);
+            ExercisesDataSource exercisesDataSource = new ExercisesDataSource(TrainingActivity.this);
 
             Calendar calendar = Calendar.getInstance();
             String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
@@ -306,9 +382,12 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         }
     }
 
-
     @Override
     public void onListenerExit() {
+
+        if (Constans.IS_ENABLE_SEND_DATA)
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{0});
+
         saveExercise();
         finish();
     }
@@ -336,17 +415,22 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
     }
 
     private void showWarnUpSessionProgressDialog() {
+
+        if (Constans.IS_ENABLE_SEND_DATA)
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{3});
+
         WarmUpSessionProgressDialog warmUpSessionProgressDialog = new WarmUpSessionProgressDialog();
         warmUpSessionProgressDialog.setCancelable(false);
-        warmUpSessionProgressDialog.show(getSupportFragmentManager(), null);
+        warmUpSessionProgressDialog.show(getSupportFragmentManager(), "dialog_warp_up");
+
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_exercise, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_exercise, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -355,19 +439,19 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
             case android.R.id.home:
                 exitActivty();
                 break;
-
-            case R.id.action_increment:
-
-                if (isStart) {
-                    eventsOnFragment.incrementRep();
-                }
-
-                break;
-            case R.id.action_next_weight:
-                if (isStart) {
-                    eventsOnFragment.nextWeight();
-                }
-                break;
+//
+//            case R.id.action_increment:
+//
+//                if (isStart) {
+//                    eventsOnFragment.incrementRep();
+//                }
+//
+//                break;
+//            case R.id.action_next_weight:
+//                if (isStart) {
+//                    eventsOnFragment.nextWeight();
+//                }
+//                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -378,13 +462,15 @@ public class ExerciseActivity extends ActionBarActivity implements AdapterView.O
         exitActivty();
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isStart) {
-//            sendData(new byte[]{3});
-        }
-//        unregisterReceiver(mReceiver);
+
+        Log.d("TAG_FINISH", "Destroy_ExerciseActivity");
+        unregisterReceiver(mReceiver);
+
+
     }
 
 

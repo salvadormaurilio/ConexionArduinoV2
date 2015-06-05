@@ -3,6 +3,7 @@ package com.google.android.gms.example.conexionarduinov2.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -68,4 +69,9 @@ public class ViewSetActivity extends ActionBarActivity implements View.OnClickLi
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("TAG_FINISH", "Destroy_ViewSetActivity");
+    }
 }

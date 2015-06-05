@@ -36,12 +36,12 @@ public class WarmUpSessionProgressDialog extends DialogFragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_warm_up_session_progress, null);
         builder.setView(view);
 
-        builder.setNegativeButton(R.string.text_exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onStartWarmUpSessionEvents.exitWarmUpSession();
-            }
-        });
+//        builder.setNegativeButton(R.string.text_exit, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                onStartWarmUpSessionEvents.exitWarmUpSession();
+//            }
+//        });
 
         return builder.create();
     }

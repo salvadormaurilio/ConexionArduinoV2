@@ -39,4 +39,7 @@ public class Constans {
     public static final String EXTRA_NAME_EXERCISE = "name_exercise";
     public static final String ARG_ID_EXERCISE = "id_exetcise";
     public static final String ARG_TYPE_EXERCISE = "type_exercise";
+
+
+    public static final boolean IS_ENABLE_SEND_DATA = true;
 }

@@ -1,10 +1,14 @@
 package com.google.android.gms.example.conexionarduinov2.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -20,6 +24,8 @@ import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
 import com.google.android.gms.example.conexionarduinov2.dialogs.OtherExerciseDialog;
 import com.google.android.gms.example.conexionarduinov2.models.InfoExerciseModel;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
+import com.google.android.gms.example.conexionarduinov2.utils.ConstantsService;
+import com.google.android.gms.example.conexionarduinov2.utils.UsbConexionUtils;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.HistoryExerciseInterface;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnOpenExerciseListener;
 
@@ -65,6 +71,10 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
 
         findViewById(R.id.buttonNewSet).setOnClickListener(this);
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConstantsService.USB_DEVICE_DETACHED);
+        registerReceiver(mReceiver, filter);
+
     }
 
     @Override
@@ -95,7 +105,11 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     @Override
     public void onRepeatSet(int position) {
 
-        Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
+        if (Constans.IS_ENABLE_SEND_DATA)
+            UsbConexionUtils.sendData(HistoryExercisesActivity.this, new byte[]{1});
+
+
+        Intent intent = new Intent(HistoryExercisesActivity.this, TrainingActivity.class);
         intent.putExtra(Constans.EXTRA_ID_EXERCISE, historyExerciseInterface.getIdExercise(position));
         intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
         intent.putExtra(Constans.EXTRA_WEIGHT, historyExerciseInterface.getWeight(position));
@@ -113,7 +127,9 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     public void onClick(View v) {
 
         if (typeExercise < 7) {
-            Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
+            if (Constans.IS_ENABLE_SEND_DATA)
+                UsbConexionUtils.sendData(HistoryExercisesActivity.this, new byte[]{1});
+            Intent intent = new Intent(HistoryExercisesActivity.this, TrainingActivity.class);
             intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
             intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
             startActivity(intent);
@@ -133,7 +149,9 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
     public void otherExercise(String exercise) {
 
         if (!TextUtils.isEmpty(exercise)) {
-            Intent intent = new Intent(HistoryExercisesActivity.this, ExerciseActivity.class);
+            if (Constans.IS_ENABLE_SEND_DATA)
+                UsbConexionUtils.sendData(HistoryExercisesActivity.this, new byte[]{1});
+            Intent intent = new Intent(HistoryExercisesActivity.this, TrainingActivity.class);
             intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
             intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
             intent.putExtra(Constans.EXTRA_NAME_EXERCISE, exercise);
@@ -151,9 +169,41 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
 
         switch (item.getItemId()) {
             case android.R.id.home:
+                if (Constans.IS_ENABLE_SEND_DATA)
+                    UsbConexionUtils.sendData(HistoryExercisesActivity.this, new byte[]{0});
                 finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (ConstantsService.DEBUG) Log.d(ConstantsService.TAG, "onReceive() " + action);
+            if (ConstantsService.USB_DEVICE_DETACHED.equals(action)) {
+                finish();
+            }
+        }
+
+    };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (Constans.IS_ENABLE_SEND_DATA)
+            UsbConexionUtils.sendData(HistoryExercisesActivity.this, new byte[]{0});
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterReceiver(mReceiver);
+
+
+        Log.d("TAG_FINISH", "Destroy_HistoryExercisesActivity");
+
+    }
 }

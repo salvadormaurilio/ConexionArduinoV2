@@ -1,10 +1,15 @@
 package com.google.android.gms.example.conexionarduinov2.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,43 +19,99 @@ import com.google.android.gms.example.conexionarduinov2.dialogs.LoginUserDialog;
 import com.google.android.gms.example.conexionarduinov2.dialogs.RegiterUserDialog;
 import com.google.android.gms.example.conexionarduinov2.models.UserInfoModel;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
+import com.google.android.gms.example.conexionarduinov2.utils.ConstantsService;
+import com.google.android.gms.example.conexionarduinov2.utils.UsbConexionUtils;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnUserInfoListener;
+
+import java.io.UnsupportedEncodingException;
 
 
 public class LoginActivity extends ActionBarActivity implements View.OnClickListener, OnUserInfoListener {
+
+    private boolean isConnectedArduino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        clearSharedPrferences();
+        clearSharedPreferences();
 
         findViewById(R.id.buttonLogin).setOnClickListener(this);
         findViewById(R.id.buttonRegister).setOnClickListener(this);
         findViewById(R.id.buttonGuest).setOnClickListener(this);
 
+        isConnectedArduino = UsbConexionUtils.findDevice(LoginActivity.this);
+//        isConnectedArduino = true;
+
+        if (isConnectedArduino) {
+            if (Constans.IS_ENABLE_SEND_DATA)
+                UsbConexionUtils.sendData(LoginActivity.this, new byte[]{1});
+        }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConstantsService.USB_DEVICE_DETACHED);
+        registerReceiver(mReceiver, filter);
+
     }
 
-    private void clearSharedPrferences() {
+
+    private void clearSharedPreferences() {
         SharedPreferences.Editor editor = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE).edit();
         editor.clear().apply();
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (ConstantsService.DEBUG) Log.d(ConstantsService.TAG, "onNewIntent() " + intent);
+
+        if (UsbManager.ACTION_USB_DEVICE_ATTACHED.contains(intent.getAction())) {
+            if (ConstantsService.DEBUG) Log.d(ConstantsService.TAG, "onNewIntent() " + intent);
+            isConnectedArduino = UsbConexionUtils.findDevice(LoginActivity.this);
+            if (isConnectedArduino) {
+                if (Constans.IS_ENABLE_SEND_DATA)
+                    UsbConexionUtils.sendData(LoginActivity.this, new byte[]{1});
+            }
+        }
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (ConstantsService.DEBUG) Log.d(ConstantsService.TAG, "onReceive() " + action);
+            if (ConstantsService.USB_DEVICE_DETACHED.equals(action)) {
+                Toast.makeText(LoginActivity.this, R.string.message_lost_connection, Toast.LENGTH_LONG).show();
+                isConnectedArduino = false;
+            }
+        }
+
+    };
+
+
+    @Override
     public void onClick(View v) {
 
-        switch (v.getId()) {
-            case R.id.buttonLogin:
-                showLoginDialog("");
-                break;
-            case R.id.buttonRegister:
-                showRegisterDialog("", 0, 1);
-                break;
-            case R.id.buttonGuest:
-                Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
-                startActivity(intent);
-                break;
+        if (isConnectedArduino) {
+            switch (v.getId()) {
+                case R.id.buttonLogin:
+                    showLoginDialog("");
+                    break;
+                case R.id.buttonRegister:
+                    showRegisterDialog("", 0, 1);
+                    break;
+                case R.id.buttonGuest:
+                    if (Constans.IS_ENABLE_SEND_DATA)
+                        UsbConexionUtils.sendData(LoginActivity.this, new byte[]{2});
+                    Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
+                    startActivity(intent);
+                    break;
+            }
+        } else {
+            Toast.makeText(LoginActivity.this, R.string.no_device_found, Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -71,6 +132,9 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         if (TextUtils.isEmpty(userName)) {
             showRegisterDialog("", positionHeight, typeUnits);
             Toast.makeText(LoginActivity.this, R.string.message_empty_user_name, Toast.LENGTH_SHORT).show();
+        } else if (!validateUserName(userName)) {
+            showRegisterDialog(userName, positionHeight, typeUnits);
+            Toast.makeText(LoginActivity.this, R.string.message_username_invalidate, Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(password) && TextUtils.isEmpty(confirmPassword)) {
             showRegisterDialog(userName, positionHeight, typeUnits);
             Toast.makeText(LoginActivity.this, R.string.message_empty_password, Toast.LENGTH_SHORT).show();
@@ -85,6 +149,11 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 editor.putLong(Constans.ID_USER_PREFERENCES, id);
                 editor.putBoolean(Constans.IS_LOGIN_PREFERENCES, true);
                 editor.apply();
+
+                if (!sendUserName(userName)) {
+                    Toast.makeText(LoginActivity.this, R.string.message_relocate_user_name, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
                 startActivity(intent);
@@ -118,6 +187,11 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                     editor.putBoolean(Constans.IS_LOGIN_PREFERENCES, true);
                     editor.apply();
 
+                    if (!sendUserName(userName)) {
+                        Toast.makeText(LoginActivity.this, R.string.message_relocate_user_name, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, getString(R.string.message_welcome) + " " + userName, Toast.LENGTH_LONG).show();
@@ -134,4 +208,59 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     }
 
 
+    private boolean validateUserName(String userName) {
+
+        try {
+            byte[] ansiBytes = userName.getBytes("UTF-8");
+
+            for (byte chapter : ansiBytes) {
+                if (chapter < 1) {
+                    return false;
+                }
+            }
+            return true;
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+
+    private boolean sendUserName(String userName) {
+        if (Constans.IS_ENABLE_SEND_DATA)
+            UsbConexionUtils.sendData(LoginActivity.this, new byte[]{1});
+        try {
+            byte[] ansiBytes = userName.getBytes("UTF-8");
+
+            for (byte chapter : ansiBytes) {
+                if (Constans.IS_ENABLE_SEND_DATA)
+                    UsbConexionUtils.sendData(LoginActivity.this, new byte[]{chapter});
+            }
+            if (Constans.IS_ENABLE_SEND_DATA)
+            UsbConexionUtils.sendData(LoginActivity.this, new byte[]{0});
+
+            return true;
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d("TAG_FINISH", "Destroy_LoginActivity");
+        if (isConnectedArduino) {
+            if (Constans.IS_ENABLE_SEND_DATA)
+                UsbConexionUtils.sendData(LoginActivity.this, new byte[]{0});
+        }
+
+        unregisterReceiver(mReceiver);
+    }
 }

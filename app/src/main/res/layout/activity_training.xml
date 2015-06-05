@@ -5,7 +5,7 @@
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:weightSum="6"
-    tools:context="com.google.android.gms.example.conexionarduinov2.ui.ExerciseActivity">
+    tools:context="com.google.android.gms.example.conexionarduinov2.ui.TrainingActivity">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -32,17 +32,8 @@
             android:id="@+id/listViewTraining"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/spaceCenter"
             android:layout_below="@+id/textView"
             android:choiceMode="singleChoice" />
-
-        <Space
-            android:id="@+id/spaceCenter"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:layout_centerVertical="true"
-            android:clickable="false"
-            android:focusable="false" />
 
 
         <ScrollView
@@ -50,7 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/buttonStart"
-            android:layout_alignTop="@+id/spaceCenter">
+            android:layout_below="@+id/listViewTraining"
+            android:layout_marginTop="16dp">
 
 
             <RelativeLayout

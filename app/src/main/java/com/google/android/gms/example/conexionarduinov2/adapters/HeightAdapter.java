@@ -16,17 +16,13 @@ import java.util.List;
  */
 public class HeightAdapter extends BaseAdapter {
 
-    private Context context;
     private LayoutInflater inflater;
     private List<String> units;
 
     public HeightAdapter(Context context, List<String> units) {
-        this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.units = units;
     }
-
-
 
     public void setUnits(List<String> units) {
         this.units = units;
@@ -60,7 +56,6 @@ public class HeightAdapter extends BaseAdapter {
 
     public View getCustomView(int position, ViewGroup parent, int iditem) {
         TextView textView = (TextView) inflater.inflate(iditem, parent, false);
-
         textView.setText(units.get(position));
         return textView;
     }

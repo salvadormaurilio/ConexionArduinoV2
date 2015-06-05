@@ -121,5 +121,8 @@
     <string name="text_loaded_weight">Loaded Weight</string>
     <string name="text_like_to_warm_up">Would you like to warm up?</string>
     <string name="title_table_executed_reps">Executed Reps.</string>
+    <string name="message_lost_connection">Lost connection</string>
+    <string name="message_username_invalidate">Nombre de Usuario Inválido</string>
+    <string name="message_relocate_user_name">Error!!! Favor de volver a colocar su Nombre de Usuario.</string>
 
 </resources>
