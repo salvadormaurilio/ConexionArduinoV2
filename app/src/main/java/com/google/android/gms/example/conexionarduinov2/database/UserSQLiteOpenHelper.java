@@ -23,15 +23,21 @@ public class UserSQLiteOpenHelper extends SQLiteOpenHelper {
         String sqlNameTableUser = "CREATE TABLE " + Constans.NAME_TABLE_USER_DB + " ( " + Constans.ID_DB + " INTEGER PRIMARY KEY, " +
                 Constans.NAME_USER_DB + " TEXT, " + Constans.PASSWORD_DB + " TEXT, " + Constans.HEIGHT_DB + " TEXT, " + Constans.TYPE_UNITS_DB + " INTEGER )";
 
-        String sqlNameTableExercises = "CREATE TABLE " + Constans.NAME_TABLE_USER_EXERCISES_DB + " ( " + Constans.ID_DB + " INTEGER PRIMARY KEY, " +
-                Constans.ID_USER_DB + " INTEGER, " + Constans.DATE_DB + " TEXT, " + Constans.TYPE_EXERCISE_DB + " INTEGER, " + Constans.TYPE_TRAINING_DB + " INTEGER, "
-                + Constans.WEIGHT_DB + " INTEGER, " + Constans.REPETITIONS_DB + " TEXT )";
+//        String sqlNameTableExercises = "CREATE TABLE " + Constans.NAME_TABLE_USER_EXERCISES_DB + " ( " + Constans.ID_DB + " INTEGER PRIMARY KEY, " +
+//                Constans.ID_USER_DB + " INTEGER, " + Constans.DATE_DB + " TEXT, " + Constans.TYPE_EXERCISE_DB + " INTEGER, " + Constans.TYPE_TRAINING_DB + " INTEGER, "
+//                + Constans.WEIGHT_DB + " INTEGER, " + Constans.REPETITIONS_DB + " TEXT )";
 
+//        String sqlNameTableExercises = "CREATE TABLE " + Constans.NAME_TABLE_USER_EXERCISES_DB + " ( " + Constans.ID_DB + " INTEGER PRIMARY KEY, " +
+//                Constans.ID_USER_DB + " INTEGER, " + Constans.DATE_DB + " TEXT, " + Constans.TYPE_EXERCISE_DB + " INTEGER, " + Constans.TYPE_TRAINING_DB + " INTEGER, "
+//                + Constans.WEIGHT_DB + " INTEGER, " + Constans.REPETITIONS_DB + " TEXT )";
 
         String sqlNameTableOther = "CREATE TABLE " + Constans.NAME_TABLE_USER_OTHER_EXERCISES_DB + " ( " + Constans.ID_DB + " INTEGER PRIMARY KEY, " +
-                Constans.ID_USER_DB + " INTEGER, " + Constans.DATE_DB + " TEXT, " + Constans.NAME_DB + " TEXT, " + Constans.TYPE_EXERCISE_DB + " INTEGER, "
-                + Constans.TYPE_TRAINING_DB + " INTEGER, " + Constans.WEIGHT_DB + " INTEGER, " + Constans.REPETITIONS_DB + " TEXT )";
+                Constans.ID_USER_DB + " INTEGER, " + Constans.DAY_DB + " INTEGER, " + Constans.MONTH_DB + " INTEGER, " + Constans.YEAR_DB + " INTEGER, " + Constans.NAME_DB + " TEXT, " + Constans.TYPE_EXERCISE_DB + " INTEGER, "
+                + Constans.TYPE_TRAINING_DB + " INTEGER, " + Constans.WEIGHT_DB + " INTEGER, " + Constans.REPETITIONS_DB + " TEXT, " + Constans.NUM_DATE_DB + " INTEGER )";
 
+        String sqlNameTableExercises = "CREATE TABLE " + Constans.NAME_TABLE_USER_EXERCISES_DB + " ( " + Constans.ID_DB + " INTEGER PRIMARY KEY, " +
+                Constans.ID_USER_DB + " INTEGER, " + Constans.DAY_DB + " INTEGER, " + Constans.MONTH_DB + " INTEGER, " + Constans.YEAR_DB + " INTEGER, " + Constans.TYPE_EXERCISE_DB + " INTEGER, " + Constans.TYPE_TRAINING_DB + " INTEGER, "
+                + Constans.WEIGHT_DB + " INTEGER, " + Constans.REPETITIONS_DB + " TEXT, " + Constans.NUM_DATE_DB + " INTEGER )";
 
         Log.d("TAG_TABLE", sqlNameTableUser);
         Log.d("TAG_TABLE", sqlNameTableExercises);

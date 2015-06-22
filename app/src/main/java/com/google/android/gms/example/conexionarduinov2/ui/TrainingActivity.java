@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -123,6 +124,7 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
                 switch (data[0]) {
                     case 0:
                         isExit = true;
+                        eventsOnFragment.onStopExercise();
                         break;
                     case 1:
                         if (isStart) {
@@ -191,7 +193,7 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if (!isStart && !isExit) {
+        if (!isStart) {
             if (typeTraining != position + 1) {
 
                 typeTraining = position + 1;
@@ -219,7 +221,7 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
 
             }
         } else {
-            listViewTraining.setItemChecked(position, true);
+            listViewTraining.setItemChecked(typeTraining - 1, true);
         }
 
     }
@@ -288,7 +290,6 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
                 if (weight > 0) {
                     weight = 0;
                     textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-                    eventsOnFragment.newWeightOrTraining();
                 }
                 break;
         }
@@ -310,8 +311,6 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
         if (weightAux <= 720) {
             weight = weightAux;
             textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-            eventsOnFragment.newWeightOrTraining();
-
         } else {
             Toast.makeText(this, R.string.warning_message_weight, Toast.LENGTH_SHORT).show();
         }
@@ -368,13 +367,13 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
             ExercisesDataSource exercisesDataSource = new ExercisesDataSource(TrainingActivity.this);
 
             Calendar calendar = Calendar.getInstance();
-            String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
+//            String date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
 
             if (typeExercise < 7) {
-                exercisesDataSource.insertExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), date, typeExercise, typeTraining,
+                exercisesDataSource.insertExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), typeExercise, typeTraining,
                         eventsOnFragment.getItemRepetions(), weight);
             } else {
-                exercisesDataSource.insertOtherExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), date, nameExercise, typeExercise, typeTraining,
+                exercisesDataSource.insertOtherExercise(sharedPreferences.getLong(Constans.ID_USER_PREFERENCES, -1), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), nameExercise, typeExercise, typeTraining,
                         eventsOnFragment.getItemRepetions(), weight);
             }
 
@@ -426,11 +425,11 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
     }
 
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_exercise, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_exercise, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -439,19 +438,19 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
             case android.R.id.home:
                 exitActivty();
                 break;
-//
-//            case R.id.action_increment:
-//
-//                if (isStart) {
-//                    eventsOnFragment.incrementRep();
-//                }
-//
-//                break;
-//            case R.id.action_next_weight:
-//                if (isStart) {
-//                    eventsOnFragment.nextWeight();
-//                }
-//                break;
+
+            case R.id.action_increment:
+
+                if (isStart) {
+                    eventsOnFragment.incrementRep();
+                }
+
+                break;
+            case R.id.action_next_weight:
+                if (isStart) {
+                    eventsOnFragment.nextWeight();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

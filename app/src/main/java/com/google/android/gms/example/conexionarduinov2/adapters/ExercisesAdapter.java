@@ -20,6 +20,8 @@ public class ExercisesAdapter extends BaseAdapter implements View.OnClickListene
     public ExercisesAdapter(Context context, String[] arrayExercises) {
         this.arrayExercises = arrayExercises;
         inflater = LayoutInflater.from(context);
+
+
     }
 
     @Override

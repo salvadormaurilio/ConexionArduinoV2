@@ -27,9 +27,15 @@ public class Constans {
     public static final String ID_USER_DB = "id_user";
     public static final String TYPE_EXERCISE_DB = "type_exercise";
     public static final String TYPE_TRAINING_DB = "type_training";
-    public static final String DATE_DB = "date";
+//    public static final String DATE_DB = "date";
+    public static final String DAY_DB = "day";
+    public static final String MONTH_DB = "month";
+    public static final String YEAR_DB = "year";
     public static final String REPETITIONS_DB = "repetitions";
     public static final String WEIGHT_DB = "weight";
+    public static final String NUM_DATE_DB = "number_date";
+    public static final int NUM_DATE_ALL_DB = 3;
+
 
     public static final String EXTRA_ID_EXERCISE = "id_exercise_table";
     public static final String EXTRA_TYPE_TRAINING = "type_training";
@@ -41,5 +47,5 @@ public class Constans {
     public static final String ARG_TYPE_EXERCISE = "type_exercise";
 
 
-    public static final boolean IS_ENABLE_SEND_DATA = true;
+    public static final boolean IS_ENABLE_SEND_DATA = false;
 }

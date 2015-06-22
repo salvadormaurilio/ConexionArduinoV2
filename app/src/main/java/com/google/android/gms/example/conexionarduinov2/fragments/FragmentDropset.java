@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -61,6 +62,11 @@ public class FragmentDropset extends Fragment implements EventsOnFragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listViewDropset = (ListView) view.findViewById(R.id.listViewTable);
@@ -74,13 +80,13 @@ public class FragmentDropset extends Fragment implements EventsOnFragment {
 
             ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
             List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositiveList = typeExercise < 7 ?
-                    exercisesDataSource.queryRepetitions(getActivity(), getArguments().getLong(Constans.ARG_ID_EXERCISE)) : exercisesDataSource.queryOtherRepetitions(getActivity(), getArguments().getLong(Constans.ARG_ID_EXERCISE, -1));
+                    exercisesDataSource.queryRepetitions( getArguments().getLong(Constans.ARG_ID_EXERCISE)) : exercisesDataSource.queryOtherRepetitions( getArguments().getLong(Constans.ARG_ID_EXERCISE, -1));
 
-            dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(getActivity(), 2, itemDropsetAndNegativePositiveList);
+            dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(getActivity(), 1, itemDropsetAndNegativePositiveList);
 
             isClearTable = false;
         } else {
-            dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(getActivity(), 2);
+            dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(getActivity(), 1);
             isClearTable = true;
         }
         listViewDropset.setAdapter(dropsetAndNegativeAdapter);
@@ -94,6 +100,13 @@ public class FragmentDropset extends Fragment implements EventsOnFragment {
 
     @Override
     public void onStartExercise() {
+
+        if (!isClearTable) {
+            textViewTitleNumReps.setText(R.string.title_table_num_rep);
+            dropsetAndNegativeAdapter.clearTable();
+
+        }
+
         listViewDropset.setItemChecked(dropsetAndNegativeAdapter.getPositionItem(), true);
         onConexiWithActivity.OnStart();
     }
@@ -109,6 +122,7 @@ public class FragmentDropset extends Fragment implements EventsOnFragment {
     @Override
     public void incrementRep() {
         dropsetAndNegativeAdapter.incrementRepetitions();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -117,12 +131,9 @@ public class FragmentDropset extends Fragment implements EventsOnFragment {
     }
 
     @Override
-    public void newWeightOrTraining() {
-        if (!isClearTable) {
-            textViewTitleNumReps.setText(R.string.title_table_num_rep);
-            dropsetAndNegativeAdapter.clearTable();
+    public void onStopExercise() {
+        listViewDropset.setItemChecked(dropsetAndNegativeAdapter.getPositionItem(), false);
 
-        }
     }
 
 

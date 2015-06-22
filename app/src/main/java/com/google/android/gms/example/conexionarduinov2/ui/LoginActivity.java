@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,12 +42,17 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         findViewById(R.id.buttonRegister).setOnClickListener(this);
         findViewById(R.id.buttonGuest).setOnClickListener(this);
 
-        isConnectedArduino = UsbConexionUtils.findDevice(LoginActivity.this);
-//        isConnectedArduino = true;
+//        isConnectedArduino = UsbConexionUtils.findDevice(LoginActivity.this);
+        isConnectedArduino = true;
 
         if (isConnectedArduino) {
             if (Constans.IS_ENABLE_SEND_DATA)
-                UsbConexionUtils.sendData(LoginActivity.this, new byte[]{1});
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        UsbConexionUtils.sendData(LoginActivity.this, new byte[]{1});
+                    }
+                }, 800);
         }
 
         IntentFilter filter = new IntentFilter();
@@ -66,12 +72,18 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         super.onNewIntent(intent);
         if (ConstantsService.DEBUG) Log.d(ConstantsService.TAG, "onNewIntent() " + intent);
 
+        Toast.makeText(LoginActivity.this, "onNewIntent", Toast.LENGTH_SHORT).show();
+
         if (UsbManager.ACTION_USB_DEVICE_ATTACHED.contains(intent.getAction())) {
             if (ConstantsService.DEBUG) Log.d(ConstantsService.TAG, "onNewIntent() " + intent);
             isConnectedArduino = UsbConexionUtils.findDevice(LoginActivity.this);
             if (isConnectedArduino) {
-                if (Constans.IS_ENABLE_SEND_DATA)
-                    UsbConexionUtils.sendData(LoginActivity.this, new byte[]{1});
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        UsbConexionUtils.sendData(LoginActivity.this, new byte[]{1});
+                    }
+                }, 800);
             }
         }
     }
@@ -85,6 +97,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             if (ConstantsService.USB_DEVICE_DETACHED.equals(action)) {
                 Toast.makeText(LoginActivity.this, R.string.message_lost_connection, Toast.LENGTH_LONG).show();
                 isConnectedArduino = false;
+                finish();
             }
         }
 
@@ -156,7 +169,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 }
 
                 Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1111);
                 Toast.makeText(LoginActivity.this, getString(R.string.message_welcome) + " " + userName, Toast.LENGTH_LONG).show();
 
             } else {
@@ -193,7 +206,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                     }
 
                     Intent intent = new Intent(LoginActivity.this, SelectExerciseActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1111);
                     Toast.makeText(LoginActivity.this, getString(R.string.message_welcome) + " " + userName, Toast.LENGTH_LONG).show();
                 } else {
                     showLoginDialog(userName);
@@ -239,7 +252,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                     UsbConexionUtils.sendData(LoginActivity.this, new byte[]{chapter});
             }
             if (Constans.IS_ENABLE_SEND_DATA)
-            UsbConexionUtils.sendData(LoginActivity.this, new byte[]{0});
+                UsbConexionUtils.sendData(LoginActivity.this, new byte[]{0});
 
             return true;
 
@@ -248,6 +261,15 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             return false;
 
         }
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        clearSharedPreferences();
 
     }
 

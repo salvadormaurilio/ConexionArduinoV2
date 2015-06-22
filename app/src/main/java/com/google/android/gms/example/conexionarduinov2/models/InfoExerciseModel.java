@@ -16,18 +16,18 @@ public class InfoExerciseModel {
     private String repetitions;
     private List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives;
 
-    public InfoExerciseModel(long idExercise, String date, int typeTraining, String training, int weight, String repetitions) {
+    public InfoExerciseModel(long idExercise, int day, int month, int year, int typeTraining, String training, int weight, String repetitions) {
         this.idExercise = idExercise;
-        this.date = date;
+        this.date = day + "/" + month + "/" + year;
         this.typeTraining = typeTraining;
         this.training = training;
         this.weight = weight;
         this.repetitions = repetitions;
     }
 
-    public InfoExerciseModel(long idExercise, String date, String name, int typeTraining, String training, int weight, String repetitions) {
+    public InfoExerciseModel(long idExercise, int day, int month, int year, String name, int typeTraining, String training, int weight, String repetitions) {
         this.idExercise = idExercise;
-        this.date = date;
+        this.date = day + "/" + month + "/" + year;
         this.name = name;
         this.typeTraining = typeTraining;
         this.training = training;
@@ -35,16 +35,16 @@ public class InfoExerciseModel {
         this.repetitions = repetitions;
     }
 
-    public InfoExerciseModel(String date, int typeTraining, String training, int weight, List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives) {
-        this.date = date;
+    public InfoExerciseModel(int day, int month, int year, int typeTraining, String training, int weight, List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives) {
+        this.date = day + "/" + month + "/" + year;
         this.typeTraining = typeTraining;
         this.training = training;
         this.weight = weight;
         this.itemDropsetAndNegativePositives = itemDropsetAndNegativePositives;
     }
 
-    public InfoExerciseModel( String date, String name, int typeTraining, String training, int weight, List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives) {
-        this.date = date;
+    public InfoExerciseModel(int day, int month, int year, String name, int typeTraining, String training, int weight, List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositives) {
+        this.date = day + "/" + month + "/" + year;
         this.name = name;
         this.typeTraining = typeTraining;
         this.training = training;
@@ -63,8 +63,6 @@ public class InfoExerciseModel {
     public String getDate() {
         return date;
     }
-
-
 
 
     public int getTypeTraining() {

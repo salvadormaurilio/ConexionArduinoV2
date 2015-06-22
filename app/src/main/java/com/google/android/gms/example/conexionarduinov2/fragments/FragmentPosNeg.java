@@ -70,7 +70,7 @@ public class FragmentPosNeg extends Fragment implements EventsOnFragment {
 
             ExercisesDataSource exercisesDataSource = new ExercisesDataSource(getActivity());
             List<ItemDropsetAndNegativePositive> itemDropsetAndNegativePositiveList = typeExercise < 7 ?
-                    exercisesDataSource.queryRepetitions(getActivity(), getArguments().getLong(Constans.ARG_ID_EXERCISE)) : exercisesDataSource.queryOtherRepetitions(getActivity(), getArguments().getLong(Constans.ARG_ID_EXERCISE, -1));
+                    exercisesDataSource.queryRepetitions(getArguments().getLong(Constans.ARG_ID_EXERCISE)) : exercisesDataSource.queryOtherRepetitions( getArguments().getLong(Constans.ARG_ID_EXERCISE, -1));
 
             dropsetAndNegativeAdapter = new DropsetAndNegativeAdapter(getActivity(), 2, itemDropsetAndNegativePositiveList);
 
@@ -90,6 +90,11 @@ public class FragmentPosNeg extends Fragment implements EventsOnFragment {
 
     @Override
     public void onStartExercise() {
+        if (!isClearTable) {
+            textViewTitleNumReps.setText(R.string.title_table_num_rep);
+            dropsetAndNegativeAdapter.clearTable();
+
+        }
         listViewDropset.setItemChecked(dropsetAndNegativeAdapter.getPositionItem(), true);
         onConexiWithActivity.OnStart();
     }
@@ -113,13 +118,8 @@ public class FragmentPosNeg extends Fragment implements EventsOnFragment {
     }
 
     @Override
-    public void newWeightOrTraining() {
-
-        if (!isClearTable) {
-            textViewTitleNumReps.setText(R.string.title_table_num_rep);
-            dropsetAndNegativeAdapter.clearTable();
-
-        }
+    public void onStopExercise() {
+        listViewDropset.setItemChecked(dropsetAndNegativeAdapter.getPositionItem(), false);
     }
 
 
