@@ -125,5 +125,7 @@
     <string name="message_username_invalidate">Nombre de Usuario Inválido</string>
     <string name="message_relocate_user_name">Error!!! Favor de volver a colocar su Nombre de Usuario.</string>
     <string name="text_max_weight">Max. Weight</string>
+    <string name="text_new_exercise">New Exercise</string>
+    <string name="text_want_new_exercise">Are you sure you want to do a new exercise?</string>
 
 </resources>

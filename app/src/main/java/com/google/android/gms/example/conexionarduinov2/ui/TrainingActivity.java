@@ -22,6 +22,8 @@ import com.google.android.gms.example.conexionarduinov2.adapters.TrainingAdapter
 import com.google.android.gms.example.conexionarduinov2.database.ExercisesDataSource;
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
 import com.google.android.gms.example.conexionarduinov2.dialogs.ExitDialog;
+import com.google.android.gms.example.conexionarduinov2.dialogs.TrainingSessionProgressDialog;
+import com.google.android.gms.example.conexionarduinov2.dialogs.TrainingSessionStartDialog;
 import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionAgainDialog;
 import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionProgressDialog;
 import com.google.android.gms.example.conexionarduinov2.dialogs.WarmUpSessionStartDialog;
@@ -32,12 +34,13 @@ import com.google.android.gms.example.conexionarduinov2.utils.ConstantsService;
 import com.google.android.gms.example.conexionarduinov2.utils.UsbConexionUtils;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.EventsOnFragment;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnConexiWithActivity;
+import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnStartTrainingSessionListener;
 import com.google.android.gms.example.conexionarduinov2.utils.interfaces.OnStartWarmUpSessionEvents;
 
 import java.util.Calendar;
 
 public class TrainingActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener,
-        ExitDialog.OnListenerExit, OnConexiWithActivity, OnStartWarmUpSessionEvents {
+        ExitDialog.OnListenerExit, OnConexiWithActivity, OnStartWarmUpSessionEvents, OnStartTrainingSessionListener {
 
 
     private ListView listViewTraining;
@@ -137,9 +140,14 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
                         }
                         break;
                     case 3:
-                        DialogFragment dialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag("dialog_warp_up");
-                        dialogFragment.dismiss();
+                        DialogFragment dialogFragmentWarmUp = (DialogFragment) getSupportFragmentManager().findFragmentByTag(Constans.TAG_DIALOG_WARM_UP);
+                        dialogFragmentWarmUp.dismiss();
                         showWarnUpSessionAgainDialog();
+                        break;
+                    case 4:
+                        DialogFragment dialogFragmentTrainingSession = (DialogFragment) getSupportFragmentManager().findFragmentByTag(Constans.TAG_DIALOG_TRAINING_SESSION);
+                        dialogFragmentTrainingSession.dismiss();
+                        onExitTrainingSession();
                         break;
                 }
 
@@ -193,38 +201,107 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+
         if (!isStart) {
             if (typeTraining != position + 1) {
 
-                typeTraining = position + 1;
-
-                if (Constans.IS_ENABLE_SEND_DATA)
-                    UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
-
-                weight = 0;
-                textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-
-                switch (typeTraining) {
+                switch (position + 1) {
                     case 1:
+                        typeTraining = position + 1;
+
+                        if (Constans.IS_ENABLE_SEND_DATA) {
+                            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
+                        }
+
+                        weight = 0;
+                        textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
+
                         minWeight = 5;
                         FragmentDropset fragmentDropset = new FragmentDropset();
                         eventsOnFragment = fragmentDropset;
                         getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentDropset).commit();
                         break;
                     case 2:
-                        minWeight = 2;
-                        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
-                        eventsOnFragment = fragmentPosNeg;
-                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
+
+                        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+                        int countExercise = sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, 0);
+
+                        Log.d("HABER", "" + countExercise);
+
+
+                        if (countExercise > 0) {
+
+                            typeTraining = position + 1;
+
+                            if (Constans.IS_ENABLE_SEND_DATA) {
+                                UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
+                                UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (countExercise)});
+                            }
+
+                            weight = 0;
+                            textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
+
+                            minWeight = 2;
+                            FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
+                            eventsOnFragment = fragmentPosNeg;
+                            getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
+                        } else {
+                            if (typeTraining != -1) {
+                                listViewTraining.setItemChecked(typeTraining - 1, true);
+                            } else {
+                                listViewTraining.setItemChecked(1, false);
+                            }
+
+                            TrainingSessionStartDialog trainingSessionStartDialog = new TrainingSessionStartDialog();
+                            trainingSessionStartDialog.show(getSupportFragmentManager(),null);
+                        }
                         break;
                 }
-
             }
         } else {
             listViewTraining.setItemChecked(typeTraining - 1, true);
         }
 
     }
+
+
+    @Override
+    public void onStartTrainingSession() {
+
+        TrainingSessionProgressDialog trainingSessionProgressDialog = new TrainingSessionProgressDialog();
+        trainingSessionProgressDialog.setShowsDialog(false);
+        trainingSessionProgressDialog.show(getSupportFragmentManager(), Constans.TAG_DIALOG_TRAINING_SESSION);
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+
+        typeTraining = 2;
+
+        if (Constans.IS_ENABLE_SEND_DATA) {
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, -1))});
+        }
+
+    }
+
+    @Override
+    public void onExitTrainingSession() {
+
+        SharedPreferences.Editor editor = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE).edit();
+        editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 1).apply();
+
+        listViewTraining.setItemChecked(typeTraining - 1, true);
+
+        weight = 0;
+        textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
+
+        minWeight = 2;
+        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
+        eventsOnFragment = fragmentPosNeg;
+        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -318,6 +395,13 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
 
     private void exitActivty() {
         if (isExit) {
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, 0) + 1);
+            editor.apply();
+
             saveExercise();
             if (Constans.IS_ENABLE_SEND_DATA)
                 UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{0});
@@ -420,7 +504,7 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
 
         WarmUpSessionProgressDialog warmUpSessionProgressDialog = new WarmUpSessionProgressDialog();
         warmUpSessionProgressDialog.setCancelable(false);
-        warmUpSessionProgressDialog.show(getSupportFragmentManager(), "dialog_warp_up");
+        warmUpSessionProgressDialog.show(getSupportFragmentManager(), Constans.TAG_DIALOG_WARM_UP);
 
     }
 

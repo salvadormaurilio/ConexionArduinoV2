@@ -16,12 +16,13 @@ import android.widget.ListView;
 import com.google.android.gms.example.conexionarduinov2.R;
 import com.google.android.gms.example.conexionarduinov2.adapters.ExercisesAdapter;
 import com.google.android.gms.example.conexionarduinov2.database.UserDataSource;
+import com.google.android.gms.example.conexionarduinov2.dialogs.NewExerciseDialog;
 import com.google.android.gms.example.conexionarduinov2.utils.Constans;
 import com.google.android.gms.example.conexionarduinov2.utils.ConstantsService;
 import com.google.android.gms.example.conexionarduinov2.utils.UsbConexionUtils;
 
 
-public class SelectExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class SelectExerciseActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, NewExerciseDialog.OnNewExerciseListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +53,57 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
 
         if (Constans.IS_ENABLE_SEND_DATA)
             UsbConexionUtils.sendData(SelectExerciseActivity.this, new byte[]{(byte) (position + 1)});
-
-        Intent intent;
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
-            intent = new Intent(SelectExerciseActivity.this, HistoryExercisesActivity.class);
-            intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, position);
+
+        int typeExercise = sharedPreferences.getInt(Constans.TYPE_EXERCISE_PREFERENCES, -1);
+
+        if (typeExercise == -1 || typeExercise == position) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            if (typeExercise == -1) {
+                editor.putInt(Constans.TYPE_EXERCISE_PREFERENCES, position);
+            }
+            editor.apply();
+
+            Intent intent;
+            if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
+                intent = new Intent(SelectExerciseActivity.this, HistoryExercisesActivity.class);
+                intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, position);
+            } else {
+                intent = new Intent(SelectExerciseActivity.this, TrainingActivity.class);
+                intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, position);
+                intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
+            }
+
+            startActivity(intent);
         } else {
-            intent = new Intent(SelectExerciseActivity.this, TrainingActivity.class);
-            intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, position);
-            intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
+            NewExerciseDialog newExerciseDialog = NewExerciseDialog.newInstance(position);
+            newExerciseDialog.show(getSupportFragmentManager(), null);
         }
 
-        startActivity(intent);
+    }
 
+    @Override
+    public void onNewExercise(int typeExercise) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 0);
+        editor.putInt(Constans.TYPE_EXERCISE_PREFERENCES, typeExercise);
+        editor.apply();
+
+        Intent intent;
+        if (sharedPreferences.getBoolean(Constans.IS_LOGIN_PREFERENCES, false)) {
+            intent = new Intent(SelectExerciseActivity.this, HistoryExercisesActivity.class);
+            intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
+        } else {
+            intent = new Intent(SelectExerciseActivity.this, TrainingActivity.class);
+            intent.putExtra(Constans.EXTRA_TYPE_EXERCISE, typeExercise);
+            intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
+        }
+        startActivity(intent);
     }
 
     @Override
@@ -109,4 +147,6 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
 
         Log.d("TAG_FINISH", "Destroy_SelectExerciseActivity");
     }
+
+
 }
