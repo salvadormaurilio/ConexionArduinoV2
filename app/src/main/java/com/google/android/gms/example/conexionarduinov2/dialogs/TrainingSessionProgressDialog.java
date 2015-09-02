@@ -32,21 +32,21 @@ public class TrainingSessionProgressDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.text_warm_up_session);
+        builder.setTitle(R.string.text_training_session);
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_session_progress, null);
 
-        TextView textView = (TextView) getActivity().getLayoutInflater().inflate(R.layout.dialog_warm_up_session_start_again, null);
-        textView.setText(R.string.text_like_to_warm_up);
+        TextView textView = (TextView) view.findViewById(R.id.textViewSessionProgress);
+        textView.setText(R.string.text_training_machine);
 
         builder.setView(view);
-
-        builder.setNegativeButton(R.string.text_exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onStartTrainingSessionListener.onExitTrainingSession();
-            }
-        });
+//
+//        builder.setNegativeButton(R.string.text_exit, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                onStartTrainingSessionListener.onExitTrainingSession();
+//            }
+//        });
 
         return builder.create();
     }

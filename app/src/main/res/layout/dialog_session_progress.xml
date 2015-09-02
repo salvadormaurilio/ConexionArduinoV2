@@ -17,7 +17,6 @@
         android:id="@+id/textViewSessionProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/text_warming_up"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
 </LinearLayout>

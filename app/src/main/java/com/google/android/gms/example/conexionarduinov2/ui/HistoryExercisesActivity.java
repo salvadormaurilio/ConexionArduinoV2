@@ -156,7 +156,6 @@ public class HistoryExercisesActivity extends ActionBarActivity implements OnOpe
             intent.putExtra(Constans.EXTRA_TYPE_TRAINING, -1);
             intent.putExtra(Constans.EXTRA_NAME_EXERCISE, exercise);
             startActivity(intent);
-
         } else {
             showDialogOtherExercise();
             Toast.makeText(HistoryExercisesActivity.this, R.string.message_other_exercise, Toast.LENGTH_LONG).show();

@@ -39,11 +39,11 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         clearSharedPreferences();
 
         findViewById(R.id.buttonLogin).setOnClickListener(this);
-        findViewById(R.id.buttonRegister).setOnClickListener(this);
+        findViewById(R.id.textViewRegister).setOnClickListener(this);
         findViewById(R.id.buttonGuest).setOnClickListener(this);
 
-//        isConnectedArduino = UsbConexionUtils.findDevice(LoginActivity.this);
-        isConnectedArduino = true;
+        isConnectedArduino = UsbConexionUtils.findDevice(LoginActivity.this);
+//        isConnectedArduino = true;
 
         if (isConnectedArduino) {
             if (Constans.IS_ENABLE_SEND_DATA)
@@ -112,7 +112,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 case R.id.buttonLogin:
                     showLoginDialog("");
                     break;
-                case R.id.buttonRegister:
+                case R.id.textViewRegister:
                     showRegisterDialog("", 0, 1);
                     break;
                 case R.id.buttonGuest:
@@ -163,6 +163,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 editor.putBoolean(Constans.IS_LOGIN_PREFERENCES, true);
                 editor.putInt(Constans.TYPE_EXERCISE_PREFERENCES, -1);
                 editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 0);
+                editor.putBoolean(Constans.IS_TRAINING_SESSION_PREFERENCES, false);
                 editor.apply();
 
                 if (!sendUserName(userName)) {
@@ -202,6 +203,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                     editor.putBoolean(Constans.IS_LOGIN_PREFERENCES, true);
                     editor.putInt(Constans.TYPE_EXERCISE_PREFERENCES, -1);
                     editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 0);
+                    editor.putBoolean(Constans.IS_TRAINING_SESSION_PREFERENCES, false);
                     editor.apply();
 
                     if (!sendUserName(userName)) {

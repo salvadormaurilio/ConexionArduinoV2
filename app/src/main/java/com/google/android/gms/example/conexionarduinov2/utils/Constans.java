@@ -23,6 +23,7 @@ public class Constans {
 
     public static final String TYPE_EXERCISE_PREFERENCES = "type_exercise_current";
     public static final String COUNT_POS_NEG_PREFERENCES = "count_exercises";
+    public static final String IS_TRAINING_SESSION_PREFERENCES = "is_training_session";
 
     public static final String EXTRA_TYPE_EXERCISE = "type_exercise";
 
@@ -53,5 +54,5 @@ public class Constans {
     public static final String TAG_DIALOG_WARM_UP = "dialog_warm_up";
     public static final String TAG_DIALOG_TRAINING_SESSION = "dialog_training_session";
 
-    public static final boolean IS_ENABLE_SEND_DATA = false;
+    public static final boolean IS_ENABLE_SEND_DATA = true;
 }

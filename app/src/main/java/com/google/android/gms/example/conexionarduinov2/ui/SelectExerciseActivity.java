@@ -59,7 +59,7 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
 
         if (typeExercise == -1 || typeExercise == position) {
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 
             if (typeExercise == -1) {
                 editor.putInt(Constans.TYPE_EXERCISE_PREFERENCES, position);
@@ -90,8 +90,9 @@ public class SelectExerciseActivity extends ActionBarActivity implements Adapter
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 0);
         editor.putInt(Constans.TYPE_EXERCISE_PREFERENCES, typeExercise);
+        editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 0);
+        editor.putBoolean(Constans.IS_TRAINING_SESSION_PREFERENCES, false);
         editor.apply();
 
         Intent intent;

@@ -75,7 +75,7 @@
             android:gravity="center"
             android:padding="16dp"
             android:background="@drawable/back_title_table_history_exercise"
-            android:text="@string/text_max_weight"
+            android:text="@string/text_loaded_weight"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 

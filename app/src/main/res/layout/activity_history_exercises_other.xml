@@ -50,8 +50,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:background="@drawable/back_title_table_history_exercise"
+            android:gravity="center"
             android:padding="16dp"
             android:text="@string/text_date"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -61,8 +61,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:background="@drawable/back_title_table_history_exercise"
+            android:gravity="center"
             android:padding="16dp"
             android:text="@string/tex_name_exercise"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -72,8 +72,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:background="@drawable/back_title_table_history_exercise"
+            android:gravity="center"
             android:padding="16dp"
             android:text="@string/text_training_system"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -83,10 +83,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/back_title_table_history_exercise"
             android:gravity="center"
             android:padding="16dp"
-            android:background="@drawable/back_title_table_history_exercise"
-            android:text="@string/text_max_weight"
+            android:text="@string/text_loaded_weight"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
@@ -94,9 +94,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/back_title_table_history_exercise"
             android:gravity="center"
             android:padding="12dp"
-            android:background="@drawable/back_title_table_history_exercise"
             android:text="@string/text_reps"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
@@ -107,10 +107,10 @@
         android:id="@+id/listViewHistoryExercises"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@android:color/transparent"
         android:layout_above="@+id/buttonNewSet"
         android:layout_below="@+id/container_titles"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:divider="@android:color/transparent" />
 
     <Button
         android:id="@+id/buttonNewSet"

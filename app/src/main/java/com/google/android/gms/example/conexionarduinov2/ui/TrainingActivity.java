@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -93,6 +92,7 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
         isExit = false;
         minWeight = 0;
 
+
         findViewById(R.id.btn_key_0).setOnClickListener(this);
         findViewById(R.id.btn_key_1).setOnClickListener(this);
         findViewById(R.id.btn_key_2).setOnClickListener(this);
@@ -170,10 +170,6 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
             }
 
             if (typeTraining != -1) {
-
-                if (Constans.IS_ENABLE_SEND_DATA)
-                    UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
-
                 weight = getIntent().getIntExtra(Constans.EXTRA_WEIGHT, 0);
                 switch (typeTraining) {
                     case 1:
@@ -223,38 +219,16 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
                         break;
                     case 2:
 
-                        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
-                        int countExercise = sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, 0);
+                        typeTraining = position + 1;
 
-                        Log.d("HABER", "" + countExercise);
+                        weight = 0;
+                        textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
 
+                        minWeight = 2;
+                        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
+                        eventsOnFragment = fragmentPosNeg;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
 
-                        if (countExercise > 0) {
-
-                            typeTraining = position + 1;
-
-                            if (Constans.IS_ENABLE_SEND_DATA) {
-                                UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
-                                UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (countExercise)});
-                            }
-
-                            weight = 0;
-                            textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-
-                            minWeight = 2;
-                            FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
-                            eventsOnFragment = fragmentPosNeg;
-                            getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
-                        } else {
-                            if (typeTraining != -1) {
-                                listViewTraining.setItemChecked(typeTraining - 1, true);
-                            } else {
-                                listViewTraining.setItemChecked(1, false);
-                            }
-
-                            TrainingSessionStartDialog trainingSessionStartDialog = new TrainingSessionStartDialog();
-                            trainingSessionStartDialog.show(getSupportFragmentManager(),null);
-                        }
                         break;
                 }
             }
@@ -272,14 +246,13 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
         trainingSessionProgressDialog.setShowsDialog(false);
         trainingSessionProgressDialog.show(getSupportFragmentManager(), Constans.TAG_DIALOG_TRAINING_SESSION);
 
-
         SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
 
         typeTraining = 2;
 
         if (Constans.IS_ENABLE_SEND_DATA) {
             UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (typeTraining)});
-            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, -1))});
+            UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{(byte) (sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, 0))});
         }
 
     }
@@ -288,17 +261,10 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
     public void onExitTrainingSession() {
 
         SharedPreferences.Editor editor = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE).edit();
-        editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 1).apply();
+        editor.putBoolean(Constans.IS_TRAINING_SESSION_PREFERENCES, true);
+        editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, 1);
+        editor.apply();
 
-        listViewTraining.setItemChecked(typeTraining - 1, true);
-
-        weight = 0;
-        textViewLoadedWeight.setText(getString(R.string.title_loaded_weight) + " " + weight + lb);
-
-        minWeight = 2;
-        FragmentPosNeg fragmentPosNeg = new FragmentPosNeg();
-        eventsOnFragment = fragmentPosNeg;
-        getSupportFragmentManager().beginTransaction().replace(R.id.containerTraining, fragmentPosNeg).commit();
 
     }
 
@@ -319,16 +285,25 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
 
         switch (v.getId()) {
             case R.id.buttonStart:
+                SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+
                 if (typeTraining == -1) {
                     Toast.makeText(this, R.string.select_training, Toast.LENGTH_SHORT).show();
                 } else if (weight < minWeight) {
                     Toast.makeText(this, getString(R.string.warning_message_weight_min) + " " + minWeight, Toast.LENGTH_SHORT).show();
+                } else if (typeTraining == 2 && !sharedPreferences.getBoolean(Constans.IS_TRAINING_SESSION_PREFERENCES, false)) {
+                    TrainingSessionStartDialog trainingSessionStartDialog = new TrainingSessionStartDialog();
+                    trainingSessionStartDialog.show(getSupportFragmentManager(), null);
                 } else {
                     eventsOnFragment.onStartExercise();
                 }
                 break;
             case R.id.buttonWarmUpSession:
-                showWarnUpSessionStartDialog();
+                if (typeTraining != -1) {
+                    showWarnUpSessionStartDialog();
+                } else {
+                    Toast.makeText(this, R.string.select_training, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.buttonExit:
                 exitActivty();
@@ -394,14 +369,16 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
     }
 
     private void exitActivty() {
-        if (isExit) {
 
-            SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences sharedPreferences = getSharedPreferences(Constans.USER_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        if (typeTraining == 2 && (isExit || (sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, 0) == 0 && sharedPreferences.getBoolean(Constans.IS_TRAINING_SESSION_PREFERENCES, false)))) {
             editor.putInt(Constans.COUNT_POS_NEG_PREFERENCES, sharedPreferences.getInt(Constans.COUNT_POS_NEG_PREFERENCES, 0) + 1);
             editor.apply();
+        }
 
+        if (isExit) {
             saveExercise();
             if (Constans.IS_ENABLE_SEND_DATA)
                 UsbConexionUtils.sendData(TrainingActivity.this, new byte[]{0});
@@ -509,11 +486,11 @@ public class TrainingActivity extends ActionBarActivity implements AdapterView.O
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_exercise, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_exercise, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

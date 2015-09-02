@@ -1,63 +1,86 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:shrinkColumns="*"
-        android:stretchColumns="*"
-        tools:ignore="UselessParent">
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
-        <TableRow
-            android:layout_gravity="center_horizontal"
-            tools:ignore="UselessParent">
+        <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/back_btn_login"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:singleLine="true"
+            android:text="@string/btn_longin"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle" />
 
-            <Button
-                android:id="@+id/buttonLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:background="@drawable/back_btn_login"
-                android:padding="16dp"
-                android:singleLine="true"
-                android:text="@string/btn_longin"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:id="@+id/buttonRegister"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:background="@drawable/back_btn_login"
-                android:padding="16dp"
-                android:singleLine="true"
-                android:text="@string/btn_register"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-
-                android:textStyle="bold"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:id="@+id/buttonGuest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:background="@drawable/back_btn_login"
-                android:padding="16dp"
-                android:singleLine="true"
-                android:text="@string/btn_guest"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold"
-                tools:ignore="ButtonStyle" />
-        </TableRow>
-    </TableLayout>
+        <Button
+            android:id="@+id/buttonGuest"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/back_btn_login"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:singleLine="true"
+            android:text="@string/btn_guest"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
 
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/tex_not_member"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            tools:ignore="ButtonStyle" />
+
+        <TextView
+            android:id="@+id/textViewRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:padding="1dp"
+            android:background="@drawable/back_textview_register"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:text="@string/btn_register"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@drawable/color_textview_register"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
+
+
+</LinearLayout>
